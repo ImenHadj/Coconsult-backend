@@ -9,10 +9,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 //@CrossOrigin(origins = "*", maxAge = 3600)
@@ -123,4 +127,28 @@ public class UserController {
         int number = rnd.nextInt(999999);
         return String.format("%06d", number);
     }
+
+    @GetMapping("/user")
+    public ResponseEntity<?> getUserDetails(Authentication authentication) {
+        if (authentication == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authentication is required");
+        }
+
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String username = userDetails.getUsername();
+
+        User user = userService.findByUsername(username);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        }
+
+        Map<String, Object> userDetailsResponse = new HashMap<>();
+        userDetailsResponse.put("username", user.getUsername());
+        userDetailsResponse.put("email", user.getEmail());
+        userDetailsResponse.put("role", user.getRoles());
+        userDetailsResponse.put("image", user.getImage());
+
+        return ResponseEntity.ok(userDetailsResponse);
+    }
+
 }

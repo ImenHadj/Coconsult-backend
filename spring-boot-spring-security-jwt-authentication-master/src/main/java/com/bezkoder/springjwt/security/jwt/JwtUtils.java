@@ -29,36 +29,47 @@ public class JwtUtils {
     UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
 
     return Jwts.builder()
-        .setSubject((userPrincipal.getUsername()))
-        .setIssuedAt(new Date())
-        .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
-        .signWith(key(), SignatureAlgorithm.HS256)
-        .compact();
+            .setSubject((userPrincipal.getUsername()))
+            .setIssuedAt(new Date())
+            .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
+            .signWith(key(), SignatureAlgorithm.HS256)
+            .compact();
   }
-  
+
   private Key key() {
     return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
   }
 
   public String getUserNameFromJwtToken(String token) {
     return Jwts.parserBuilder().setSigningKey(key()).build()
-               .parseClaimsJws(token).getBody().getSubject();
+            .parseClaimsJws(token).getBody().getSubject();
   }
 
   public boolean validateJwtToken(String authToken) {
     try {
-      Jwts.parserBuilder().setSigningKey(key()).build().parse(authToken);
-      return true;
-    } catch (MalformedJwtException e) {
-      logger.error("Invalid JWT token: {}", e.getMessage());
-    } catch (ExpiredJwtException e) {
-      logger.error("JWT token is expired: {}", e.getMessage());
-    } catch (UnsupportedJwtException e) {
-      logger.error("JWT token is unsupported: {}", e.getMessage());
-    } catch (IllegalArgumentException e) {
-      logger.error("JWT claims string is empty: {}", e.getMessage());
-    }
+      Claims claims = Jwts.parserBuilder().setSigningKey(key()).build().parseClaimsJws(authToken).getBody();
 
+      Date expiration = claims.getExpiration();
+      Date now = new Date();
+
+      // Ajouter une marge de tolérance (par exemple, 5 minutes) pour l'heure actuelle
+      long toleranceMillis = 5 * 60 * 1000; // 5 minutes en millisecondes
+      Date adjustedNow = new Date(now.getTime() + toleranceMillis);
+
+      // Vérifier si la date d'expiration est après l'heure actuelle avec la marge de tolérance
+      if (expiration.after(adjustedNow)) {
+        return true;
+      } else {
+        logger.error("JWT token is expired: {}", expiration);
+      }
+    } catch (JwtException e) {
+      logger.error("Invalid JWT token: {}", e.getMessage());
+    }
     return false;
   }
+
+
+
+
+
 }

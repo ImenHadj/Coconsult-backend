@@ -2,6 +2,7 @@ package com.bezkoder.springjwt.payload.response;
 
 import java.util.List;
 
+
 public class JwtResponse {
   private String token;
   private String type = "Bearer";
