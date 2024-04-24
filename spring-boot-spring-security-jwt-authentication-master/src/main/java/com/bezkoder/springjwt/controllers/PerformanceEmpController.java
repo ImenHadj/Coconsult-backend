@@ -1,17 +1,23 @@
 package com.bezkoder.springjwt.controllers;
 
+import com.bezkoder.springjwt.Service.ServicePerformance;
 import com.bezkoder.springjwt.Service.interfaces.ISerivcePerformance;
 import com.bezkoder.springjwt.models.*;
 
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @AllArgsConstructor
 @RequestMapping("/perfomanceEmpl")
 public class PerformanceEmpController {
+    @Autowired
+    private ServicePerformance performanceService;
     ISerivcePerformance iSerivcePerformance;
     @PostMapping("/addperfomanceEmpl/{id}")
     public void savePerformance(@RequestBody PerformanceEmployee p,@PathVariable("id") Long id){
@@ -33,4 +39,8 @@ public class PerformanceEmpController {
     public List<PerformanceEmployee> getAllPerformances(){
         return iSerivcePerformance.getAllPerformances();
     }
-}
+    @GetMapping("/average-by-criteria")
+    public ResponseEntity<Map<critereNote, Double>> getAverageByCriteria() {
+        Map<critereNote, Double> averages = performanceService.getAverageByCriteria();
+        return ResponseEntity.ok(averages);
+    }}

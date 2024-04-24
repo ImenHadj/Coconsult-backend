@@ -5,16 +5,20 @@ import com.bezkoder.springjwt.models.*;
 import com.bezkoder.springjwt.repository.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @Service
 @Slf4j
 @AllArgsConstructor
 public class ServicePerformance implements ISerivcePerformance {
-
+    @Autowired
+    private NoteRepo noteRepository;
     PerfermanceEmplRepo performanceEmployeeRepository;
     EmployeeRepo employeeRepo;
 
@@ -58,5 +62,12 @@ public class ServicePerformance implements ISerivcePerformance {
             return "Good";
         }
     }
-
+    public Map<critereNote, Double> getAverageByCriteria() {
+        List<Object[]> averages = noteRepository.findAverageByCriteria();
+        Map<critereNote, Double> result = new HashMap<>();
+        for (Object[] average : averages) {
+            result.put((critereNote) average[0], (Double) average[1]);
+        }
+        return result;
+    }
 }

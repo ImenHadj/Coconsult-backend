@@ -96,7 +96,14 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
           auth.requestMatchers("/api/auth/**").permitAll()
               .requestMatchers("/api/test/**").permitAll()
                   .requestMatchers("/api/users/**").permitAll()
-                  .requestMatchers("/api/users/forgotPassword").permitAll()
+                  .requestMatchers("/api/test/user" ).permitAll()
+
+                  .requestMatchers("/api/users/**").permitAll()
+                  .requestMatchers("/api/users/statistics/role").permitAll()
+
+                  .requestMatchers("/api/users/forgotPassword").permitAll() // Autoriser l'accès sans authentification
+                  .requestMatchers("/perfomanceEmpl/average-by-criteria").permitAll() // Autoriser l'accès sans authentification
+
                   .requestMatchers("/coconsult/**").permitAll()
                   .requestMatchers("/recrutement/**").permitAll()
                   .requestMatchers("/DetailsRect/**").permitAll()
