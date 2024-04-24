@@ -27,8 +27,8 @@ public class ServiceSalaire implements IServiceSalaire {
     EmployeeRepo employeeRepo;
     CongeRepo congeRepo;
     AbsenceRepo absenceRepo;
+    ContratEmplRepo contratEmplRepo;
     IServiceContratEmpl iServiceContratEmpl;
-
 
     @Override
     public ResponseEntity<?> addSalaire(SalaireEmployee salaire, Long employeeId) {
@@ -72,6 +72,7 @@ public class ServiceSalaire implements IServiceSalaire {
         List<SalaireEmployee> salaries = salaireEmployeeService.findByEmployeAndDateBetween(employee, startDate, endDate);
         return salaries.isEmpty();
     }
+
     private Float calculateTotalSalaire(SalaireEmployee salaire, Employee employee) {
         Set<ContratEmployee> Contracts = employee.getContratEmployees();
         ContratEmployee ContraEmp = null;
@@ -80,6 +81,7 @@ public class ServiceSalaire implements IServiceSalaire {
                 ContraEmp = ce;
             }
         }
+
         Float totalSalaire = ContraEmp.getSalaire_base() + salaire.getPrime() + ContraEmp.getMontant_heures_supplementaires() * salaire.getHeures_supplementaires();
         Float DeductionConge = calculateTotalHoursOfCongeesInCurrentMonth(employee.getId_employe()) * ContraEmp.getMontant_Conge_Absence();
         return totalSalaire - DeductionConge;
@@ -165,11 +167,25 @@ public class ServiceSalaire implements IServiceSalaire {
                     nb += se.getTotal_salaire();
                 }
             }
-
         }
         return nb / employees.size();
     }
 
+    //    public ResponseEntity<?> generateMonthlySalaryReport(int year, int month) {
+//        YearMonth selectedMonth = YearMonth.of(year, month);
+//        LocalDate startDate = selectedMonth.atDay(1);
+//        LocalDate endDate = selectedMonth.atEndOfMonth();
+//
+//        List<SalaireEmployee> salaries = salaireEmployeeService.findByDateBetween(startDate, endDate);
+//        List<Map<String, Object>> report = new ArrayList<>();
+//        for (SalaireEmployee salary : salaries) {
+//            Map<String, Object> salaryDetails = new HashMap<>();
+//            salaryDetails.put("EmployeeName", salary.getEmploye().getPosteEmployee());
+//            salaryDetails.put("TotalSalary", salary.getTotal_salaire());
+//            report.add(salaryDetails);
+//        }
+//        return ResponseEntity.ok(report);
+//    }
     public ResponseEntity<?> generateMonthlySalaryReport(int year, int month) {
         YearMonth selectedMonth = YearMonth.of(year, month);
         LocalDate startDate = selectedMonth.atDay(1);
@@ -278,6 +294,4 @@ public class ServiceSalaire implements IServiceSalaire {
 
         return ResponseEntity.ok(salaryEvolution);
     }
-
-
 }

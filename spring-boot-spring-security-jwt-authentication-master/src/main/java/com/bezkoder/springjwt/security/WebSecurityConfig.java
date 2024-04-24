@@ -48,14 +48,14 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
 //  public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
 //    authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
 //  }
-  
+
   @Bean
   public DaoAuthenticationProvider authenticationProvider() {
       DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-       
+
       authProvider.setUserDetailsService(userDetailsService);
       authProvider.setPasswordEncoder(passwordEncoder());
-   
+
       return authProvider;
   }
 
@@ -64,7 +64,7 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
 //  public AuthenticationManager authenticationManagerBean() throws Exception {
 //    return super.authenticationManagerBean();
 //  }
-  
+
   @Bean
   public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
     return authConfig.getAuthenticationManager();
@@ -86,7 +86,7 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
 //
 //    http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 //  }
-  
+
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http.csrf(csrf -> csrf.disable())
@@ -100,22 +100,23 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
                   .requestMatchers("/absence/**").permitAll() // Autoriser l'accès sans authentification
                   .requestMatchers("/cloudinary/**").permitAll() // Autoriser l'accès sans authentification
                   .requestMatchers("/Conge/**").permitAll() // Autoriser l'accès sans authentification
-                  .requestMatchers("/contratEmpl/**").permitAll() // Autoriser l'accès sans authentification
+                  .requestMatchers("/contratEmpl/**").permitAll()
+                  .requestMatchers("/SalaireEmpl/**").permitAll() // Autoriser l'accès sans authentificat// Autoriser l'accès sans authentification
                   .requestMatchers("/departement/**").permitAll() // Autoriser l'accès sans authentification
 //                  .requestMatchers("/employee/retrieveAll").hasAuthority("ROLE_ADMIN")// Autoriser l'accès sans authentification
                   .requestMatchers("/employee/**").permitAll()// Autoriser l'accès sans authentification
                   .requestMatchers("/Note/**").permitAll() // Autoriser l'accès sans authentification
-                  .requestMatchers("/perfomanceEmpl/**").permitAll() // Autoriser l'accès sans authentification
-                  .requestMatchers("/SalaireEmpl/**").permitAll() // Autoriser l'accès sans authentification
+                  .requestMatchers("/perfomanceEmpl/**").permitAll()// Autoriser l'accès sans authentification
+
 
 
                   .anyRequest().authenticated()
         );
-    
+
     http.authenticationProvider(authenticationProvider());
 
     http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
-    
+
     return http.build();
   }
 
