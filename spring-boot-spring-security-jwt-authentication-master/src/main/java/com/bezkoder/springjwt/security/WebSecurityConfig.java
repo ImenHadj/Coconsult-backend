@@ -1,5 +1,6 @@
 package com.bezkoder.springjwt.security;
 
+import com.bezkoder.springjwt.models.ERole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -91,11 +92,22 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
     http.csrf(csrf -> csrf.disable())
         .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-        .authorizeHttpRequests(auth -> 
+        .authorizeRequests(auth ->
           auth.requestMatchers("/api/auth/**").permitAll()
               .requestMatchers("/api/test/**").permitAll()
                   .requestMatchers("/api/users/**").permitAll()
-                  .requestMatchers("/api/users/forgotPassword").permitAll() // Autoriser l'accès sans authentification
+                  .requestMatchers("/api/users/forgotPassword").permitAll()
+                  .requestMatchers("/absence/**").permitAll() // Autoriser l'accès sans authentification
+                  .requestMatchers("/cloudinary/**").permitAll() // Autoriser l'accès sans authentification
+                  .requestMatchers("/Conge/**").permitAll() // Autoriser l'accès sans authentification
+                  .requestMatchers("/contratEmpl/**").permitAll() // Autoriser l'accès sans authentification
+                  .requestMatchers("/departement/**").permitAll() // Autoriser l'accès sans authentification
+//                  .requestMatchers("/employee/retrieveAll").hasAuthority("ROLE_ADMIN")// Autoriser l'accès sans authentification
+                  .requestMatchers("/employee/**").permitAll()// Autoriser l'accès sans authentification
+                  .requestMatchers("/Note/**").permitAll() // Autoriser l'accès sans authentification
+                  .requestMatchers("/perfomanceEmpl/**").permitAll() // Autoriser l'accès sans authentification
+                  .requestMatchers("/SalaireEmpl/**").permitAll() // Autoriser l'accès sans authentification
+
 
                   .anyRequest().authenticated()
         );

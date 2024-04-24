@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Set;
 
@@ -21,6 +22,9 @@ public class Employee implements Serializable {
     private Long id_employe ;
     @Temporal(TemporalType.DATE)
     private Date date_embauche ;
+
+    private LocalDate hireDate;
+
     @Enumerated(EnumType.STRING)
     private PosteEmployee PosteEmployee;
     @ManyToOne(cascade = CascadeType.ALL)

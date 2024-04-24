@@ -5,12 +5,16 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface SalaireEmplRepo extends JpaRepository<SalaireEmployee,Long> {
-    @Query("SELECT s FROM SalaireEmployee s WHERE s.isArchive = :isArchive AND s.salaire_base > :minSalaire")
-    public List<SalaireEmployee> findByIsArchiveAndSalaireBaseGreaterThan(@Param("isArchive") Boolean isArchive, @Param("minSalaire") Float minSalaire);
-
+//    @Query("SELECT s FROM SalaireEmployee s WHERE s.isArchive = :isArchive AND s.salaire_base > :minSalaire")
+//    public List<SalaireEmployee> findByIsArchiveAndSalaireBaseGreaterThan(@Param("isArchive") Boolean isArchive, @Param("minSalaire") Float minSalaire);
+List<SalaireEmployee> findByEmployeAndDateBetween(Employee employee, LocalDate startDate, LocalDate endDate);
+    List<SalaireEmployee> findByDateBetween(LocalDate startDate,LocalDate endDate);
+    @Query(value = "SELECT MIN(se.date) FROM salaire_employee se", nativeQuery = true)
+    LocalDate findOldestSalaryDate();
      /*
     	@Query("Select "
 			+ "DISTINCT p from Patient p "

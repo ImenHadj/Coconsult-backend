@@ -1,19 +1,20 @@
 package com.bezkoder.springjwt.Service;
 
 
+import com.bezkoder.springjwt.Service.interfaces.IServiceContratEmpl;
 import com.bezkoder.springjwt.Service.interfaces.IServiceSalaire;
 import com.bezkoder.springjwt.models.*;
 import com.bezkoder.springjwt.repository.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 
@@ -26,37 +27,62 @@ public class ServiceSalaire implements IServiceSalaire {
     EmployeeRepo employeeRepo;
     CongeRepo congeRepo;
     AbsenceRepo absenceRepo;
+    IServiceContratEmpl iServiceContratEmpl;
+
 
     @Override
-    public void addSalaire(SalaireEmployee salaire, Long employeeId) {
+    public ResponseEntity<?> addSalaire(SalaireEmployee salaire, Long employeeId) {
 
         Employee employee = employeeRepo.findById(employeeId).get();
-        Set<ContratEmployee> Contracts = employee.getContratEmployees();
-        for(ContratEmployee ce : Contracts){
-            if(ce.getIsArchive()){
+        if (isSalaryAlreadyAddedForCurrentMonth(employee)) {
 
+
+            Set<ContratEmployee> Contracts = employee.getContratEmployees();
+            for (ContratEmployee ce : Contracts) {
+                if (!ce.getIsArchive()) {
+                    ContratEmployee ContraEmp = ce;
+                }
             }
-        }
 
-        Float totalSalaire = calculateTotalSalaire(salaire, employee);
-        salaire.setTotal_salaire(totalSalaire);
+            Float totalSalaire = calculateTotalSalaire(salaire, employee);
+            salaire.setTotal_salaire(totalSalaire);
 
-        List<SalaireEmployee> salaireEmployees = salaireEmployeeService.findAll();
+            List<SalaireEmployee> salaireEmployees = salaireEmployeeService.findAll();
 
-        if (salaireEmployees != null) {
-            for (SalaireEmployee se : salaireEmployees) {
-                se.setIsArchive(true);
+            if (salaireEmployees != null) {
+                for (SalaireEmployee se : salaireEmployees) {
+                    se.setIsArchive(true);
+                }
             }
+            salaire.setIsArchive(false);
+            salaire.setEmploye(employee);
+            salaire.setDate(LocalDate.now());
+            salaireEmployeeService.save(salaire);
+            return ResponseEntity.ok( salaire.getId_salaire());
+        }else {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Invalid Salary request. Please check your inputs.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         }
-        salaire.setIsArchive(false);
-        salaire.setEmploye(employee);
-        salaireEmployeeService.save(salaire);
     }
-
+    private boolean isSalaryAlreadyAddedForCurrentMonth(Employee employee) {
+        YearMonth currentMonth = YearMonth.now();
+        LocalDate startDate = currentMonth.atDay(1);
+        LocalDate endDate = currentMonth.atEndOfMonth();
+        List<SalaireEmployee> salaries = salaireEmployeeService.findByEmployeAndDateBetween(employee, startDate, endDate);
+        return salaries.isEmpty();
+    }
     private Float calculateTotalSalaire(SalaireEmployee salaire, Employee employee) {
-        Float totalSalaire = salaire.getSalaire_base() + salaire.getPrime() + salaire.getMontant_heures_supplementaires()*salaire.getHeures_supplementaires();
-        Float DeductionConge =calculateTotalHoursOfCongeesInCurrentMonth(employee.getId_employe()) * salaire.getMontant_heures_supplementaires();
-        return totalSalaire  - DeductionConge;
+        Set<ContratEmployee> Contracts = employee.getContratEmployees();
+        ContratEmployee ContraEmp = null;
+        for (ContratEmployee ce : Contracts) {
+            if (!ce.getIsArchive()) {
+                ContraEmp = ce;
+            }
+        }
+        Float totalSalaire = ContraEmp.getSalaire_base() + salaire.getPrime() + ContraEmp.getMontant_heures_supplementaires() * salaire.getHeures_supplementaires();
+        Float DeductionConge = calculateTotalHoursOfCongeesInCurrentMonth(employee.getId_employe()) * ContraEmp.getMontant_Conge_Absence();
+        return totalSalaire - DeductionConge;
     }
 
     public int calculateTotalHoursOfCongeesInCurrentMonth(Long id) {
@@ -111,12 +137,12 @@ public class ServiceSalaire implements IServiceSalaire {
 
     @Override
     public List<SalaireEmployee> retrieveAll() {
-       return salaireEmployeeService.findAll();
+        return salaireEmployeeService.findAll();
     }
 
-    public List<SalaireEmployee> findBySalaireBaseGreaterThan(Float minSalaire) {
-        return salaireEmployeeService.findByIsArchiveAndSalaireBaseGreaterThan(false,minSalaire);
-    }
+//    public List<SalaireEmployee> findBySalaireBaseGreaterThan(Float minSalaire) {
+//        return salaireEmployeeService.findByIsArchiveAndSalaireBaseGreaterThan(false,minSalaire);
+//    }
 
     //juste st7a9itha fel fct calculateAverageSalaryByPoste
     public List<Employee> findAllByPosteEmployee(PosteEmployee posteEmployee) {
@@ -144,9 +170,114 @@ public class ServiceSalaire implements IServiceSalaire {
         return nb / employees.size();
     }
 
+    public ResponseEntity<?> generateMonthlySalaryReport(int year, int month) {
+        YearMonth selectedMonth = YearMonth.of(year, month);
+        LocalDate startDate = selectedMonth.atDay(1);
+        LocalDate endDate = selectedMonth.atEndOfMonth();
 
+        List<SalaireEmployee> salaries = salaireEmployeeService.findByDateBetween(startDate, endDate);
+        if (salaries.isEmpty()) {
+            return ResponseEntity.ok("No salary records found for the specified month.");
+        }
 
+        Map<String, Map<String, Object>> report = new HashMap<>();
 
+        for (SalaireEmployee salary : salaries) {
+            Employee employee = salary.getEmploye();
+
+            String employeeName = String.valueOf(employee.getPosteEmployee()); // Use employee name as the key
+            if (!report.containsKey(employeeName)) {
+                Map<String, Object> employeeDetails = new HashMap<>();
+                employeeDetails.put("Position", employee.getPosteEmployee());
+                employeeDetails.put("TotalSalary", 0.0);
+                employeeDetails.put("Salary Details", new HashMap<>());
+                report.put(employeeName, employeeDetails);
+            }
+            Map<String, Object> employeeDetails = report.get(employeeName);
+            double totalSalary = (double) employeeDetails.get("TotalSalary");
+            totalSalary += salary.getTotal_salaire();
+            employeeDetails.put("TotalSalary", totalSalary);
+
+            Map<String, Double> components = (Map<String, Double>) employeeDetails.get("Salary Details");
+            components.put("TotalSalaire", components.getOrDefault("BaseSalary", 0.0) + salary.getTotal_salaire());
+            components.put("Bonuses", components.getOrDefault("Bonuses", 0.0) + salary.getPrime());
+            components.put("Supplement Hour", components.getOrDefault("Supplement Hour", 0.0) + salary.getHeures_supplementaires());
+        }
+
+        return ResponseEntity.ok(report);
+    }
+
+    @Scheduled(cron = "0 0 0 1 1 ?")
+    public ResponseEntity<?> incrementSalaryForEmployees() {
+        float incrementAmount =0;
+        float currentSalary=0;
+        List<Employee> employees = employeeRepo.findAll();
+        for (Employee employee : employees) {
+            for (ContratEmployee contratEmployee : employee.getContratEmployees()) {
+                if (!contratEmployee.getIsArchive()) {
+                    currentSalary += contratEmployee.getSalaire_base();
+                    incrementAmount = currentSalary * (contratEmployee.getPourcentage() / 100);
+                }
+            }
+
+            float newSalary = currentSalary + incrementAmount;
+
+            updateEmployeeSalary(employee.getId_employe(), newSalary);
+        }
+        return ResponseEntity.ok("Salary incremented for all employees.");
+    }
+    private void updateEmployeeSalary(Long employeeId, float newSalary) {
+        Employee employee = employeeRepo.findById(employeeId).orElse(null);
+
+        for (ContratEmployee contratEmployee : employee.getContratEmployees()) {
+            if (!contratEmployee.getIsArchive()) {
+                contratEmployee.setSalaire_base(newSalary);
+                iServiceContratEmpl.updateContratEmployee(contratEmployee,employeeId);
+            }
+        }
+    }
+
+    public ResponseEntity<?> generateSalaryStatistics(int year, int month) {
+        YearMonth selectedMonth = YearMonth.of(year, month);
+        LocalDate startDate = selectedMonth.atDay(1);
+        LocalDate endDate = selectedMonth.atEndOfMonth();
+
+        List<SalaireEmployee> salaries = salaireEmployeeService.findByDateBetween(startDate, endDate);
+
+        double totalSalaries = salaries.stream().mapToDouble(SalaireEmployee::getTotal_salaire).sum();
+        double averageSalary = totalSalaries / salaries.size();
+        double maxSalary = salaries.stream().mapToDouble(SalaireEmployee::getTotal_salaire).max().orElse(0);
+        double minSalary = salaries.stream().mapToDouble(SalaireEmployee::getTotal_salaire).min().orElse(0);
+
+        Map<String, Object> statistics = new HashMap<>();
+        statistics.put("TotalSalaries", totalSalaries);
+        statistics.put("AverageSalary", averageSalary);
+        statistics.put("MaxSalary", maxSalary);
+        statistics.put("MinSalary", minSalary);
+
+        return ResponseEntity.ok(statistics);
+    }
+
+    public ResponseEntity<?> getTotalSalariesEvolution() {
+        Map<String, Double> salaryEvolution = new LinkedHashMap<>(); // Use LinkedHashMap to maintain insertion order
+
+        LocalDate oldestSalaryDate = salaireEmployeeService.findOldestSalaryDate();
+
+        LocalDate currentDate = LocalDate.now();
+
+        for (LocalDate current = oldestSalaryDate; !current.isAfter(currentDate); current = current.plusMonths(1)) {
+            LocalDate startDate = current.withDayOfMonth(1);
+            LocalDate endDate = current.withDayOfMonth(current.lengthOfMonth());
+
+            List<SalaireEmployee> salaries = salaireEmployeeService.findByDateBetween(startDate, endDate);
+
+            double totalSalary = salaries.stream().mapToDouble(SalaireEmployee::getTotal_salaire).sum();
+
+            salaryEvolution.put(current.toString(), totalSalary);
+        }
+
+        return ResponseEntity.ok(salaryEvolution);
+    }
 
 
 }

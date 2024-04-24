@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 
 @Entity
 @NoArgsConstructor
@@ -18,12 +19,12 @@ public class SalaireEmployee implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_salaire ;
 
-    private Float salaire_base;
     private Float prime ;
     private Float heures_supplementaires ;
-    private Float montant_heures_supplementaires ;
     private Float total_salaire;
     private Boolean isArchive ;
+    private LocalDate date;
+
     @ManyToOne(cascade = CascadeType.ALL)
     Employee employe;
 

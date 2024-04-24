@@ -1,10 +1,7 @@
 package com.bezkoder.springjwt.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -14,6 +11,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 public class ContratEmployee implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,7 +26,11 @@ public class ContratEmployee implements Serializable {
     private ContratEmployeeType typeCE;
     private int duree_hebdomadaire;
     private Float salaire_base;
+    private Float montant_heures_supplementaires ;
+    private Float montant_Conge_Absence ;
     private Boolean isArchive;
+    private int pourcentage;
+
     @ManyToOne(cascade = CascadeType.ALL)
     Employee empl;
 }

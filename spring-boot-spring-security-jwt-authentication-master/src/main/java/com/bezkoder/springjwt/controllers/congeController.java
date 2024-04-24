@@ -25,6 +25,12 @@ public class congeController {
     public Set<Conge> getCongesByEmp(@PathVariable("id") Long id){
         return iServiceConge.getCongesByEmp(id);
     }
+    @GetMapping("/filterByStatus")
+    public ResponseEntity<List<Conge>> filterByStatus(
+            @RequestParam CongeStatut startingLetter) {
+        List<Conge> matchingConges = iServiceConge.filterByStatus(startingLetter);
+        return ResponseEntity.ok(matchingConges);
+    }
     @GetMapping("/search")
     public ResponseEntity<List<Conge>> searchCongesStartingWithLetter(
             @RequestParam String startingLetter) {

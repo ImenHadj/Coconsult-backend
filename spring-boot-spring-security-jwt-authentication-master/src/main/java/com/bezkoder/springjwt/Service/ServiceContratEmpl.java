@@ -35,66 +35,79 @@ public class ServiceContratEmpl implements IServiceContratEmpl {
         Employee emp = employeeRepo.findById(id).get();
         Set<ContratEmployee> anis = emp.getContratEmployees();
         ContratEmployee OldContrat = null;
-        if(anis.size()>0){
-            if (ContratEmployeeIsValid(contrat, emp)){
+        if (anis.size() > 0) {
+            if (ContratEmployeeIsValid(contrat, emp)) {
+                for (ContratEmployee se : anis) {
+                    se.setIsArchive(true);
+                }
+                contrat.setIsArchive(false);
                 contrat.setEmpl(emp);
                 contratEmplRepo.save(contrat);
-                return ResponseEntity.ok( contrat.getId_contrat_e());
+                return ResponseEntity.ok(contrat.getId_contrat_e());
 
-            }else{
+            } else {
                 Map<String, String> errorResponse = new HashMap<>();
                 errorResponse.put("error", "Invalid Contrat request. Please check your inputs.");
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);            }
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+            }
         }
-        if(contrat.getDate_debut().isAfter(contrat.getDate_fin())){
+        if (contrat.getDate_debut().isAfter(contrat.getDate_fin())) {
             Map<String, String> errorResponse = new HashMap<>();
             errorResponse.put("error", "Invalid Contrat request. Please check your inputs.");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         }
         contrat.setEmpl(emp);
         contratEmplRepo.save(contrat);
-        return ResponseEntity.ok( contrat.getId_contrat_e());
+        return ResponseEntity.ok(contrat.getId_contrat_e());
 
     }
-    public boolean ContratEmployeeIsValid(ContratEmployee contrat, Employee em){
+
+    public boolean ContratEmployeeIsValid(ContratEmployee contrat, Employee em) {
         Set<ContratEmployee> oldContracts = em.getContratEmployees();
-        int nb =0;
-        for(ContratEmployee ce : oldContracts){
-            if(ce.getTypeCE().equals(ContratEmployeeType.CIVP)){
-                nb+=1;
+        int nb = 0;
+        for (ContratEmployee ce : oldContracts) {
+            if (ce.getTypeCE().equals(ContratEmployeeType.CIVP)) {
+                nb += 1;
             }
         }
 
-       if(contrat.getDate_debut().isAfter(contrat.getDate_fin()) ||
-               nb>=1 && contrat.getTypeCE().equals(ContratEmployeeType.CIVP)
-       ){
-           return false;
-       }
-       return true;
+        if (contrat.getDate_debut().isAfter(contrat.getDate_fin()) ||
+                nb >= 1 && contrat.getTypeCE().equals(ContratEmployeeType.CIVP)
+        ) {
+            return false;
+        }
+        return true;
     }
 
     @Override
     public ResponseEntity<?> updateContratEmployee(ContratEmployee Updatedcontrat, Long id) {
         ContratEmployee contratEmployee = contratEmplRepo.findById(id).get();
         Employee emp = contratEmployee.getEmpl();
-        if (ContratEmployeeIsValid(Updatedcontrat, emp)){
-            contratEmployee.setRib(Updatedcontrat.getRib());
-            contratEmployee.setDate_debut(Updatedcontrat.getDate_debut());
-            contratEmployee.setDate_fin(Updatedcontrat.getDate_fin());
-            contratEmployee.setDuree_hebdomadaire(Updatedcontrat.getDuree_hebdomadaire());
-            contratEmployee.setSalaire_base(Updatedcontrat.getSalaire_base());
-            contratEmployee.setNumeroSecuriteSociale(Updatedcontrat.getNumeroSecuriteSociale());
-            contratEmployee.setDuree_hebdomadaire(Updatedcontrat.getDuree_hebdomadaire());
-            contratEmployee.setTypeCE(Updatedcontrat.getTypeCE());
-            contratEmployee.setIsArchive(Updatedcontrat.getIsArchive());
-            contratEmplRepo.save(contratEmployee);
-            return ResponseEntity.ok( contratEmployee.getId_contrat_e());
-        }else{
+
+        if (ContratEmployeeIsValid(Updatedcontrat, emp)) {
+            ContratEmployee updatedEmployee = ContratEmployee.builder()
+                    .rib(Updatedcontrat.getRib())
+                    .date_debut(Updatedcontrat.getDate_debut())
+                    .date_fin(Updatedcontrat.getDate_fin())
+                    .duree_hebdomadaire(Updatedcontrat.getDuree_hebdomadaire())
+                    .salaire_base(Updatedcontrat.getSalaire_base())
+                    .montant_heures_supplementaires(Updatedcontrat.getMontant_heures_supplementaires())
+                    .numeroSecuriteSociale(Updatedcontrat.getNumeroSecuriteSociale())
+                    .duree_hebdomadaire(Updatedcontrat.getDuree_hebdomadaire())
+                    .montant_Conge_Absence(Updatedcontrat.getMontant_Conge_Absence())
+                    .typeCE(Updatedcontrat.getTypeCE())
+                    .isArchive(Updatedcontrat.getIsArchive())
+                    .build();
+
+            contratEmplRepo.save(updatedEmployee);
+            return ResponseEntity.ok(updatedEmployee.getId_contrat_e());
+        } else {
             Map<String, String> errorResponse = new HashMap<>();
             errorResponse.put("error", "Invalid Contrat request. Please check your inputs.");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);        }
-
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+        }
     }
+
 
     @Override
     public void deleteContratEmployee(Long id) {
@@ -119,7 +132,7 @@ public class ServiceContratEmpl implements IServiceContratEmpl {
         LocalDate localDate = LocalDate.now();
         for (int d = 0; d < contrat.size(); d++) {
             ContratEmployee S = contrat.get(d);
-            long aa =   ChronoUnit.DAYS.between( localDate, S.getDate_fin());
+            long aa = ChronoUnit.DAYS.between(localDate, S.getDate_fin());
             if (aa <= 0) {
                 log.info("Contrat expiré. Contract ID: {}. Timestamp: {}", S.getId_contrat_e(), LocalDateTime.now().toEpochSecond(ZoneOffset.UTC));
                 S.setIsArchive(true);
@@ -127,9 +140,10 @@ public class ServiceContratEmpl implements IServiceContratEmpl {
             }
         }
     }
+
     @Override
     public Integer countByIsArchiveIsFalseAndDate_debutBetween(Date startDate, Date endDate) {
-        return contratEmplRepo.countByIsArchiveIsFalseAndDateDebutBetween(startDate,endDate);
+        return contratEmplRepo.countByIsArchiveIsFalseAndDateDebutBetween(startDate, endDate);
     }
 
     public void export(HttpServletResponse response, ContratEmployee contrat) throws IOException {
@@ -156,10 +170,9 @@ public class ServiceContratEmpl implements IServiceContratEmpl {
         paragraphData.add("Contract Type: " + contrat.getTypeCE() + "\n");
         paragraphData.add("Weekly Duration: " + contrat.getDuree_hebdomadaire() + " hours\n");
         paragraphData.add("Base Salary: " + contrat.getSalaire_base() + " TD\n");
+        paragraphData.add("Price of Hour: " + contrat.getMontant_heures_supplementaires() + " TD\n");
         paragraphData.add("Is Archived: " + contrat.getIsArchive() + "\n");
         document.add(paragraphData);
         document.close();
     }
-
-
 }

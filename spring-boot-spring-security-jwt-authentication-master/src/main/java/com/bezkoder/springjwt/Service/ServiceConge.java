@@ -132,7 +132,10 @@ public class ServiceConge implements IServiceConge {
 
         return congeRepo.findById(id).get();
     }
-
+    public List<Conge> filterByStatus(CongeStatut status) {
+        String statusString = status.toString(); // Convert enum to string
+        return congeRepo.findByStatutC(statusString);
+    }
     @Override
     public List<Conge> retrieveAll() {
         return congeRepo.findAll();
