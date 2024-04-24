@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -312,9 +314,161 @@ public class ServiceImp implements Iservice {
         }
     }
 
+    public Consultant addAndAssignConsultantToProjects(Consultant consultant, List<Long> projectIds) {
+        if (consultant == null || projectIds == null || projectIds.isEmpty()) {
+            throw new IllegalArgumentException("Consultant and at least one project must be provided.");
+        }
 
+        // Récupérer les projets à partir de leurs IDs
+        List<Project> projects = projectRepository.findAllById(projectIds);
+
+        // Mettre à jour la liste des consultants pour chaque projet
+        for (Project project : projects) {
+            if (project.getConsultants() == null) {
+                project.setConsultants(new ArrayList<>());
+            }
+            project.getConsultants().add(consultant);
+        }
+
+        // Mettre à jour la liste des projets pour le consultant
+        if (consultant.getProjects() == null) {
+            consultant.setProjects(new ArrayList<>());
+        }
+        consultant.getProjects().addAll(projects);
+
+        // Enregistrer le consultant mis à jour
+        Consultant savedConsultant = consultantRepository.save(consultant);
+
+        // Retourner le consultant avec les projets affectés
+        return savedConsultant;
+    }
+
+    public Consultant addConsultant(Consultant C) {
+        return consultantRepository.save(C);
+    }
+
+    public void assignConsultantsToProject(Long projectId, List<Long> consultantIds) {
+        // Récupérer le projet par son identifiant
+        Project project = projectRepository.findById(projectId).orElse(null);
+        if (project == null) {
+            // Gérer le cas où le projet n'existe pas
+            throw new IllegalArgumentException("Le projet avec l'identifiant " + projectId + " n'existe pas.");
+        }
+
+        // Récupérer les consultants par leurs identifiants
+        List<Consultant> consultants = consultantRepository.findAllById(consultantIds);
+
+        // Affecter les consultants au projet
+        project.setConsultants(consultants);
+
+        // Enregistrer les modifications dans la base de données
+        projectRepository.save(project);
+    }
+
+    public void deleteConsultant(Long id) {
+        Consultant consultant = consultantRepository.findById(id).orElse(null);
+        if (consultant == null) {
+            // Si le consultant n'existe pas, ne rien faire
+            return;
+        }
+        // Retirer le consultant de tous les projets auxquels il est associé
+        consultant.getProjects().forEach(project -> project.getConsultants().remove(consultant));
+        // Supprimer le consultant lui-même
+        consultantRepository.delete(consultant);
+    }
+
+
+
+
+    public Consultant updateConsultant(Long id, Consultant updatedConsultant) {
+        Consultant existingConsultant = consultantRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Aucun consultant trouvé avec l'ID : " + id));
+        if (existingConsultant != null) {
+            // Mettre à jour les champs du consultant existant avec les nouvelles valeurs
+            existingConsultant.setName(updatedConsultant.getName());
+            existingConsultant.setAvailability(updatedConsultant.isAvailability());
+            existingConsultant.setSkills(updatedConsultant.getSkills());
+            existingConsultant.setHourlyRate(updatedConsultant.getHourlyRate());
+            existingConsultant.setHoursWorked(updatedConsultant.getHoursWorked());
+
+            // Enregistrer les modifications dans la base de données
+            consultantRepository.save(existingConsultant);
+        } else {
+            throw new IllegalArgumentException("Consultant with ID " + id + " not found");
+        }
+        return existingConsultant;
+    }
+
+
+
+
+    public List<Consultant> getAllConsultants() {
+        return consultantRepository.findAll();
+    }
+
+
+    public List<Consultant> getConsultantsByProject(Long projectId) {
+
+        return consultantRepository.findByProjectsProjectid(projectId);
+    }
+
+
+    public ResponseEntity<Consultant> getConsultantById(Long id) {
+        Optional<Consultant> consultantOptional = consultantRepository.findById(id);
+        if (consultantOptional.isPresent()) {
+            return new ResponseEntity<>(consultantOptional.get(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
 
     }
+    public double calculateProjectProgression(Long projectId) {
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new NoSuchElementException("Projet non trouvé"));
+
+        List<Task> tasks = project.getTasks();
+        int totalTasks = tasks.size();
+        if (totalTasks == 0) {
+            return 0.0;
+        }
+
+        int totalProgress = 0;
+        for (Task task : tasks) {
+            totalProgress += task.getProgression();
+        }
+        return ((double) totalProgress / totalTasks);
+    }
+
+    public List<Object[]> calculateProfitabilityByYear() {
+        List<Project> projects = projectRepository.findAll();
+        Map<Integer, Double> profitabilityByYearMap = new HashMap<>();
+
+        // Parcourir tous les projets pour calculer la rentabilité par année
+        for (Project project : projects) {
+            LocalDate startDate = project.getStartDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            LocalDate endDate = project.getEndDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+            int startYear = startDate.getYear();
+            int endYear = endDate.getYear();
+
+            // Ajouter la rentabilité du projet à la rentabilité totale de chaque année
+            for (int year = startYear; year <= endYear; year++) {
+                double profitability = project.getExpectedRevenue() - project.getCost();
+                profitabilityByYearMap.merge(year, profitability, Double::sum);
+            }
+        }
+
+        // Convertir la map en liste d'objets pour le retour
+        List<Object[]> profitabilityByYearList = new ArrayList<>();
+        for (Map.Entry<Integer, Double> entry : profitabilityByYearMap.entrySet()) {
+            profitabilityByYearList.add(new Object[]{entry.getKey(), entry.getValue()});
+        }
+
+        return profitabilityByYearList;
+    }
+
+
+}
 
 
 

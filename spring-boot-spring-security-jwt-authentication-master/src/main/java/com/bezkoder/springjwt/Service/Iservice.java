@@ -1,5 +1,6 @@
 package com.bezkoder.springjwt.Service;
 
+import com.bezkoder.springjwt.models.Consultant;
 import com.bezkoder.springjwt.models.Project;
 import com.bezkoder.springjwt.models.Task;
 import org.springframework.http.ResponseEntity;
@@ -27,4 +28,13 @@ public interface Iservice {
     ResponseEntity<?> calculateStatisticsByType();
     List<Object[]> calculateProfitabilityForEachProject();
     ResponseEntity<?> getBestProjectOfTheYear();
+    Consultant addAndAssignConsultantToProjects(Consultant consultant, List<Long> projectIds);
+    void assignConsultantsToProject(Long projectId, List<Long> consultantIds);
+    Consultant addConsultant(Consultant C);
+    void deleteConsultant(Long id);
+    Consultant updateConsultant(Long id, Consultant updatedConsultant);
+    List<Consultant> getAllConsultants();
+    List<Consultant> getConsultantsByProject(Long projectId);
+    ResponseEntity<Consultant> getConsultantById(Long id);
+    List<Object[]> calculateProfitabilityByYear();
 }

@@ -517,14 +517,21 @@ public class AuthController {
     user.setRoles(roles);
 
     // Ajout de l'image de profil
-    /*try {
-      String imageUrl = cloudinaryService.upload(signUpRequest.getImage());
+    try {
+      // Appel à cloudinaryService.upload() pour obtenir les informations sur le téléchargement
+      Map<String, Object> uploadResult = cloudinaryService.upload(signUpRequest.getImage());
+
+      // Extrait l'URL de l'image de la Map retournée par cloudinaryService.upload()
+      String imageUrl = (String) uploadResult.get("url");
+
+      // Utilisez l'URL de l'image comme prévu
       user.setImage(imageUrl);
+
     } catch (IOException e) {
       return ResponseEntity
               .badRequest()
               .body(new MessageResponse("Error: Failed to upload image!"));
-    }*/
+    }
 
     // Générer un secret TOTP unique pour l'utilisateur
     String secret = mfaService.generateNewSecret();
