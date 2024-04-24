@@ -8,11 +8,13 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
+
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
+
 
 public class Team {
     @Id
@@ -20,10 +22,15 @@ public class Team {
     private Long team_id;
     private String team_name;
     private boolean availability;
-//    @OneToMany(mappedBy = "team")
-//    private List<Project> projects;
-    @OneToMany(mappedBy ="teem",fetch = FetchType.EAGER )
+    private double nbteam ;
+
     @JsonIgnore
+    @OneToOne(mappedBy = "team")
+    private Project project;
+
+    @JsonIgnore
+    @OneToMany(mappedBy ="teams",fetch = FetchType.EAGER)
     private List<Employee> employees;
+
 
 }

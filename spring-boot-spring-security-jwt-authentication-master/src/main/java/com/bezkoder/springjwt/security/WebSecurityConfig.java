@@ -97,6 +97,32 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
               .requestMatchers("/api/test/**").permitAll()
                   .requestMatchers("/api/users/**").permitAll()
                   .requestMatchers("/api/users/forgotPassword").permitAll()
+                  .requestMatchers("/coconsult/**").permitAll()
+                  .requestMatchers("/recrutement/**").permitAll()
+                  .requestMatchers("/DetailsRect/**").permitAll()
+
+                            .requestMatchers("/", "/static/**").permitAll()
+
+                    .requestMatchers("/","/favicon.ico").permitAll()
+                    .requestMatchers("/", "/index.html", "/static/**").permitAll()
+                     .requestMatchers("/", "/login.html", "/static/**").permitAll()
+                      .requestMatchers("/", "/register.html", "/static/**").permitAll()
+                      .requestMatchers("/", "/videocall.html", "/static/**").permitAll()
+                    // Autoriser l'accès aux API de connexion, déconnexion et gestion des utilisateurs
+                    .requestMatchers("/api/v1/users/login/**").permitAll()
+                         .requestMatchers("/","/api/v1/users/logout/**").permitAll()
+                      .requestMatchers("/","/api/v1/users/**").permitAll()
+
+    .requestMatchers("/","/api/new-resource/**").permitAll() // Autoriser l'accès sans authentification
+                            .requestMatchers("/stock/**").permitAll()
+                            .requestMatchers("/commande/**").permitAll()
+                            .requestMatchers("/fournisseur/**").permitAll()
+                            .requestMatchers("/reclamation/**").permitAll()
+                            .requestMatchers("/resource/**").permitAll()
+                            .requestMatchers("/resource/removeResource").permitAll()
+                            .requestMatchers("/resource/resources/{id}/image").permitAll()
+                            .requestMatchers("/resource/add-resource").permitAll()
+
                   .requestMatchers("/absence/**").permitAll() // Autoriser l'accès sans authentification
                   .requestMatchers("/cloudinary/**").permitAll() // Autoriser l'accès sans authentification
                   .requestMatchers("/Conge/**").permitAll() // Autoriser l'accès sans authentification
@@ -106,20 +132,15 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
 //                  .requestMatchers("/employee/retrieveAll").hasAuthority("ROLE_ADMIN")// Autoriser l'accès sans authentification
                   .requestMatchers("/employee/**").permitAll()// Autoriser l'accès sans authentification
                   .requestMatchers("/Note/**").permitAll() // Autoriser l'accès sans authentification
-                  .requestMatchers("/perfomanceEmpl/**").permitAll()// Autoriser l'accès sans authentification
-
-
-
-                  .anyRequest().authenticated()
-        );
-
+                  .requestMatchers("/perfomanceEmpl/**").permitAll()// Autoriser l'accès sans au
+    .anyRequest().authenticated()
+            );
     http.authenticationProvider(authenticationProvider());
 
     http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
     return http.build();
   }
-
 
   @Bean
   public CorsConfigurationSource corsConfigurationSource() {

@@ -15,7 +15,7 @@ public interface CongeRepo extends JpaRepository<Conge,Long> {
 
 
     @Query("SELECT c FROM Conge c WHERE " +
-            "c.employee.teem.team_id = :teamId AND " +
+            "c.employee.teams.team_id = :teamId AND " +
             "c.employee.PosteEmployee = :poste AND " +
             "((c.date_debut BETWEEN :start AND :end) OR " +
             "(c.date_fin BETWEEN :start AND :end) OR " +

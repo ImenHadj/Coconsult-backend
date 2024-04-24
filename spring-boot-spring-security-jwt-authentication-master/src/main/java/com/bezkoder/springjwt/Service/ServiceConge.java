@@ -43,7 +43,7 @@ public class ServiceConge implements IServiceConge {
 
 
         List<Conge> overlappingConges = congeRepo.findCongeInSamePeriodAndSameTeam(
-                employee.getTeem().getTeam_id(),
+                employee.getTeams().getTeam_id(),
                 employee.getPosteEmployee(),
                 conge.getDate_debut(),
                 conge.getDate_fin());
@@ -79,7 +79,7 @@ public class ServiceConge implements IServiceConge {
         }
 
         List<Conge> overlappingConges = congeRepo.findCongeInSamePeriodAndSameTeam(
-                employee.getTeem().getTeam_id(),
+                employee.getTeams().getTeam_id(),
                 employee.getPosteEmployee(),
                 conge.getDate_debut(),
                 conge.getDate_fin());

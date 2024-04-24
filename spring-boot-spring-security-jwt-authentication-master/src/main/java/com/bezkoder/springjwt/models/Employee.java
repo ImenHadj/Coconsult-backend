@@ -2,10 +2,14 @@ package com.bezkoder.springjwt.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+
 import lombok.*;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+
+
+
 import java.util.Date;
 import java.util.Set;
 
@@ -48,10 +52,12 @@ public class Employee implements Serializable {
     Set<Absence> absences;
     private int nbrJourConge = 26;
 
+    @JsonIgnore
     @ManyToOne (cascade = CascadeType.ALL)
-    Team teem;
+    Team teams;
     @OneToOne(cascade = CascadeType.ALL)
     PerformanceEmployee performanceEmployee;
 
     private Long userId;
+
 }
