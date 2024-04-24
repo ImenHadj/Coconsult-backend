@@ -1,6 +1,9 @@
 package com.bezkoder.springjwt.models;
 
+<<<<<<< HEAD
 import com.fasterxml.jackson.annotation.JsonIgnore;
+=======
+>>>>>>> Rh
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -33,7 +36,6 @@ public class Project {
     private double expectedRevenue;
     @Enumerated(EnumType.STRING)
     private Priority priority;
-
     @JsonIgnore
     @OneToOne
     private Team team;
@@ -42,7 +44,7 @@ public class Project {
     private List<Task> tasks;
     @JsonIgnore
     @ManyToMany
-   List<Consultant>  consultants;
+    List<Consultant>  consultants;
     @JsonIgnore
     @ManyToMany
     List<Resources> resources;

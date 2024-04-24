@@ -18,23 +18,23 @@ public class Resources {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="ResourceID")
-    Long ResourceID;
-    String Name;
-    String Description;
-    float Price ;
-   // @Enumerated(EnumType.STRING)
-   // ResourceStatus ReStatus ;
-   // @Enumerated(EnumType.STRING)
-   // ResourcesCategorie Categorie ;
-
-
-
-
-   // @OneToMany(mappedBy = "resources")
-   // private List<Stock> stocks;
+    Long resourceID;
+    String name;
+    String description;
+    float price ;
+    @Enumerated(EnumType.STRING)
+    ResourceStatus reStatus ;
+    @Enumerated(EnumType.STRING)
+    ResourcesCategorie categorie ;
+    @Lob
+    @Column(name = "image", columnDefinition="LONGBLOB")
+    private byte[] image;
     @JsonIgnore
     @ManyToMany(mappedBy ="resources",  cascade = CascadeType.ALL)
     List <Project> projects;
+    @OneToOne(mappedBy = "resource")
+    @JsonIgnore
+    private Stock stock;
 
 
 

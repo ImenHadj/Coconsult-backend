@@ -1,0 +1,6 @@
+package com.bezkoder.springjwt.models;
+
+public enum TypeIntitules {
+    RESPONSABLE_RH, DIRECTEUR_RH, CHARGE_RECRUTEMENT,  ASSISTANT_RH,RESPONSABLE_FORMATION,
+    JURISTE_SOCIAL, CONSULTANT_RH
+}

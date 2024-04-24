@@ -85,7 +85,7 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
 //
 //    http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 //  }
-  
+
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http.csrf(csrf -> csrf.disable())
@@ -97,18 +97,38 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
                   .requestMatchers("/api/users/**").permitAll()
                   .requestMatchers("/api/users/forgotPassword").permitAll()
                   .requestMatchers("/coconsult/**").permitAll()
+                  .requestMatchers("/recrutement/**").permitAll()
+                  .requestMatchers("/DetailsRect/**").permitAll()
 
+                            .requestMatchers("/", "/static/**").permitAll()
 
-                  .anyRequest().authenticated()
-        );
-    
+                    .requestMatchers("/","/favicon.ico").permitAll()
+                    .requestMatchers("/", "/index.html", "/static/**").permitAll()
+                     .requestMatchers("/", "/login.html", "/static/**").permitAll()
+                      .requestMatchers("/", "/register.html", "/static/**").permitAll()
+                      .requestMatchers("/", "/videocall.html", "/static/**").permitAll()
+                    // Autoriser l'accès aux API de connexion, déconnexion et gestion des utilisateurs
+                    .requestMatchers("/api/v1/users/login/**").permitAll()
+                         .requestMatchers("/","/api/v1/users/logout/**").permitAll()
+                      .requestMatchers("/","/api/v1/users/**").permitAll()
+
+    .requestMatchers("/","/api/new-resource/**").permitAll() // Autoriser l'accès sans authentification
+                            .requestMatchers("/stock/**").permitAll()
+                            .requestMatchers("/commande/**").permitAll()
+                            .requestMatchers("/fournisseur/**").permitAll()
+                            .requestMatchers("/reclamation/**").permitAll()
+                            .requestMatchers("/resource/**").permitAll()
+                            .requestMatchers("/resource/removeResource").permitAll()
+                            .requestMatchers("/resource/resources/{id}/image").permitAll()
+                            .requestMatchers("/resource/add-resource").permitAll()
+    .anyRequest().authenticated()
+            );
     http.authenticationProvider(authenticationProvider());
 
     http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
-    
+
     return http.build();
   }
-
 
   @Bean
   public CorsConfigurationSource corsConfigurationSource() {
