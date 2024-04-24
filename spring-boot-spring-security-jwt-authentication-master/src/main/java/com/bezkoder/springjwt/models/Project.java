@@ -1,9 +1,7 @@
 package com.bezkoder.springjwt.models;
 
-<<<<<<< HEAD
 import com.fasterxml.jackson.annotation.JsonIgnore;
-=======
->>>>>>> Rh
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
