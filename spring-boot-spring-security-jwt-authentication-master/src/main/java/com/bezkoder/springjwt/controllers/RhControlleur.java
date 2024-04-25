@@ -136,8 +136,7 @@ public class RhControlleur {
         Recrutement recrutement = rhService.getRecrutementById(idRecrutement);
         if (recrutement == null) {
             return new ResponseEntity<>("Recrutement non trouvé pour l'ID spécifié.", HttpStatus.NOT_FOUND);
-        }
-        candidat.setRecrutementC(recrutement);
+        } candidat.setRecrutementC(recrutement);
         int score = 0;
         if (candidat.getNiveauDetude() == niveauDetude.MASTERE  ) {
             score += 20;
@@ -146,7 +145,6 @@ public class RhControlleur {
         } else if (candidat.getNiveauDetude() == niveauDetude.LICENCE) {
             score += 10;
         }
-
         if (candidat.getExperience() == Experience.DEBUTANT) {
             score += 20;
         } else if (candidat.getExperience() == Experience.JUNIOR) {
@@ -176,6 +174,21 @@ public class RhControlleur {
 
         return new ResponseEntity<>("Fichiers téléversés avec succès ! ", HttpStatus.OK);
     }
+
+    @GetMapping("/nombreCandParPoste")
+    public ResponseEntity<Map<String, Integer>> getNombreCandidatsParPoste() {
+        // Appeler la méthode du service pour obtenir les données
+        Map<String, Integer> nombreCandidatsParPoste = rhService.getNombreCandidatsParPoste();
+
+        return ResponseEntity.ok(nombreCandidatsParPoste);
+    }
+
+    @GetMapping("/candidatsAcceptesParPosteParExperiencPro")
+    public ResponseEntity<Map<String, Integer>> getCandidatsAcceptesParPosteParExperience() {
+        Map<String, Integer> candidatsAcceptesParPosteParExperiencePro = rhService.getCandidatsAcceptesParPosteParExperience();
+        return ResponseEntity.ok(candidatsAcceptesParPosteParExperiencePro);
+    }
+
 
 
 

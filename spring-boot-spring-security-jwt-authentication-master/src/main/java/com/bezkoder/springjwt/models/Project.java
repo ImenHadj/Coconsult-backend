@@ -1,5 +1,7 @@
 package com.bezkoder.springjwt.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,6 +10,7 @@ import lombok.Setter;
 
 import java.util.Date;
 import java.util.List;
+
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,10 +20,9 @@ import java.util.List;
 public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long project_id;
-
-    private String project_name;
-    private String project_description;
+    private Long projectid;
+    private String projectname;
+    private String projectdescription;
     private Date startDate;
     private Date endDate;
     @Enumerated(EnumType.STRING)
@@ -32,15 +34,16 @@ public class Project {
     private double expectedRevenue;
     @Enumerated(EnumType.STRING)
     private Priority priority;
-
-//    @ManyToOne
-//    private Team team;
-//    @OneToMany(mappedBy = "project")
-//    private List<Task> tasks;
-//    @ManyToOne
-//    Consultant consultant;
-//    @OneToMany(mappedBy = "project")
-//    private List<Task> taskList;
+    @JsonIgnore
+    @OneToOne
+    private Team team;
+    @JsonIgnore
+    @OneToMany(mappedBy ="project",  cascade = CascadeType.ALL)
+    private List<Task> tasks;
+    @JsonIgnore
+    @ManyToMany
+    List<Consultant>  consultants;
+    @JsonIgnore
     @ManyToMany
     List<Resources> resources;
 }

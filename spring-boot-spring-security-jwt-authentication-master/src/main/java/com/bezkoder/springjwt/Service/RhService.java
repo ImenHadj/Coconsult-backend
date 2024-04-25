@@ -12,7 +12,9 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Slf4j
@@ -213,6 +215,54 @@ public class RhService  implements  IRhService {
     public List<String> getEmailsByCandidatId(Long candidatId) {
         return candidatRepo.findEmailsByIdCandidat(candidatId);
     }
+
+    public Map<String, Integer> getNombreCandidatsParPoste() {
+        List<Object[]> results = recrutementRepo.findNombreCandidatsParPoste();
+        Map<String, Integer> nombreCandidatsParPoste = new HashMap<>();
+        int totalCandidats = 0;
+        int posteMaxCandidats = 0;
+        int posteMinCandidats = Integer.MAX_VALUE;
+        String posteMax = "";
+        String posteMin = "";
+        for (Object[] result : results) {
+            String poste = (String) result[0];
+            int nombreCandidats = ((Long) result[1]).intValue();
+            nombreCandidatsParPoste.put(poste, nombreCandidats);
+            totalCandidats += nombreCandidats;
+            if (nombreCandidats > posteMaxCandidats) {
+                posteMaxCandidats = nombreCandidats;
+                posteMax = poste;
+            }
+            if (nombreCandidats < posteMinCandidats) {
+                posteMinCandidats = nombreCandidats;
+                posteMin = poste;
+            }
+        }
+        double moyenneCandidatsParPoste = totalCandidats / (double) nombreCandidatsParPoste.size();
+
+        // Afficher les statistiques
+        System.out.println("Total de candidats : " + totalCandidats);
+        System.out.println("Poste avec le plus de candidats : " + posteMax + " (Nombre : " + posteMaxCandidats + ")");
+        System.out.println("Poste avec le moins de candidats : " + posteMin + " (Nombre : " + posteMinCandidats + ")");
+        System.out.println("Moyenne de candidats par poste : " + moyenneCandidatsParPoste);
+
+        return nombreCandidatsParPoste;
+    }
+    public Map<String, Integer> getCandidatsAcceptesParPosteParExperience() {
+        List<Object[]> results = recrutementRepo.getCandidatsAcceptesParPosteParExperience();
+
+        Map<String, Integer> candidatsAcceptesParPosteParExperiencePro = new HashMap<>();
+
+        for (Object[] result : results) {
+            String poste = (String) result[0];
+            Integer nombreCandidats = ((Long) result[1]).intValue();
+
+            candidatsAcceptesParPosteParExperiencePro.put(poste, nombreCandidats);
+        }
+        return candidatsAcceptesParPosteParExperiencePro;
+    }
+
+
 
 
 

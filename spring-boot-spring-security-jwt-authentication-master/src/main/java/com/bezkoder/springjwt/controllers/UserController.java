@@ -1,6 +1,7 @@
 package com.bezkoder.springjwt.controllers;
 
 import com.bezkoder.springjwt.Service.UserService;
+import com.bezkoder.springjwt.models.ERole;
 import com.bezkoder.springjwt.models.User;
 import com.bezkoder.springjwt.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,9 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 //@CrossOrigin(origins = "*", maxAge = 3600)
@@ -122,5 +125,26 @@ public class UserController {
         Random rnd = new Random();
         int number = rnd.nextInt(999999);
         return String.format("%06d", number);
+    }
+    @GetMapping("/count-by-role")
+    public ResponseEntity<List<Object[]>> countUsersByRole() {
+        List<Object[]> counts = userService.countUsersByRole();
+        return ResponseEntity.ok(counts);
+    }
+
+    @GetMapping("/advanced-stats")
+    public ResponseEntity<Map<String, Long>> getAdvancedUserStats() {
+        long totalUsers = userRepository.count();
+        long adminUsers = userRepository.countByRolesName(ERole.ROLE_ADMIN);
+        long employeeUsers = userRepository.countByRolesName(ERole.ROLE_EMPLOYEE);
+        // Ajoutez d'autres statistiques avancées selon vos besoins
+
+        Map<String, Long> stats = new HashMap<>();
+        stats.put("totalUsers", totalUsers);
+        stats.put("adminUsers", adminUsers);
+        stats.put("employeeUsers", employeeUsers);
+        // Ajoutez d'autres statistiques avancées selon vos besoins
+
+        return ResponseEntity.ok(stats);
     }
 }

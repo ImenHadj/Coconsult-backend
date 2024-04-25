@@ -12,6 +12,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Resources {
 
     @Id
@@ -28,15 +29,12 @@ public class Resources {
     @Lob
     @Column(name = "image", columnDefinition="LONGBLOB")
     private byte[] image;
-
-
-
-
+    @JsonIgnore
+    @ManyToMany(mappedBy ="resources",  cascade = CascadeType.ALL)
+    List <Project> projects;
     @OneToOne(mappedBy = "resource")
     @JsonIgnore
     private Stock stock;
-    @ManyToMany
-    private List <Project> projects;
 
 
 

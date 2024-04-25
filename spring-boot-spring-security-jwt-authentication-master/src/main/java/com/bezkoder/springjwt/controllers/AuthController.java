@@ -6,7 +6,8 @@ import java.util.stream.Collectors;
 
 import com.bezkoder.springjwt.Service.CloudinaryService;
 import com.bezkoder.springjwt.Service.UserService;
-import com.bezkoder.springjwt.models.AccountStatus;
+import com.bezkoder.springjwt.models.*;
+import com.bezkoder.springjwt.repository.EmployeeRepo;
 import com.bezkoder.springjwt.tfa.MultiFactorAuthentificationService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -24,9 +25,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import com.bezkoder.springjwt.models.ERole;
-import com.bezkoder.springjwt.models.Role;
-import com.bezkoder.springjwt.models.User;
 import com.bezkoder.springjwt.payload.request.LoginRequest;
 import com.bezkoder.springjwt.payload.request.SignupRequest;
 import com.bezkoder.springjwt.payload.response.JwtResponse;
@@ -48,9 +46,11 @@ public class AuthController {
 
   @Autowired
   UserRepository userRepository;
-
   @Autowired
   RoleRepository roleRepository;
+  @Autowired
+  EmployeeRepo employeeRepository;
+
 
   @Autowired
   PasswordEncoder encoder;
@@ -508,6 +508,23 @@ public class AuthController {
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
             roles.add(modRole);
             break;
+          case "employee":
+            Role employeeRole = roleRepository.findByName(ERole.ROLE_EMPLOYEE)
+                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+            roles.add(employeeRole);
+
+            User savedUser = userRepository.save(user);
+
+// Récupérer l'ID de l'utilisateur nouvellement créé
+            Long userId = savedUser.getId();
+
+// Ensuite, créez l'employé et associez l'ID de l'utilisateur
+            Employee employee = new Employee();
+            employee.setUserId(userId);
+
+// Enregistrez l'employé
+            employeeRepository.save(employee);
+            break;
           default:
             Role userRole = roleRepository.findByName(ERole.ROLE_USER)
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
@@ -517,32 +534,25 @@ public class AuthController {
     }
     user.setRoles(roles);
 
-//    try {
-//      // Appel à cloudinaryService.upload() pour obtenir les informations sur le téléchargement
-//      Map<String, Object> uploadResult = cloudinaryService.upload(signUpRequest.getImage());
-//
-//      // Extrait l'URL de l'image de la Map retournée par cloudinaryService.upload()
-//      String imageUrl = (String) uploadResult.get("url");
-//
-//      // Utilisez l'URL de l'image comme prévu
-//      user.setImage(imageUrl);
-//
-//    } catch (IOException e) {
-//      return ResponseEntity
-//              .badRequest()
-//              .body(new MessageResponse("Error: Failed to upload image!"));
-//    }
+    // Ajout de l'image de profil
+    try {
+      Map<String, Object> uploadResult = cloudinaryService.upload(signUpRequest.getImage());
+      String imageUrl = (String) uploadResult.get("url");
+      user.setImage(imageUrl);
+    } catch (IOException e) {
+      return ResponseEntity
+              .badRequest()
+              .body(new MessageResponse("Error: Failed to upload image!"));
+    }
 
     // Générer un secret TOTP unique pour l'utilisateur
     String secret = mfaService.generateNewSecret();
-
-    // Enregistrer le secret TOTP dans la base de données avec l'utilisateur
     user.setTotpSecret(secret);
 
     // Activer l'authentification MFA dès le signup
     user.setMfaEnabled(true);
 
-    // Enregistrer l'utilisateur dans la base de données
+    // Enregistrement de l'utilisateur dans la base de données
     userRepository.save(user);
 
     String qrCodeUri = mfaService.generateQrCodeImageUri(secret);
@@ -553,7 +563,6 @@ public class AuthController {
 
     return ResponseEntity.ok(response);
   }
-
   /*@PostMapping("/signin")
   public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
     String username = loginRequest.getUsername();

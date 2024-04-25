@@ -7,6 +7,7 @@ import com.bezkoder.springjwt.models.StatutCandidat;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 public interface IRhService {
 
@@ -41,5 +42,7 @@ public interface IRhService {
 
     List<Object[]> getRendezVousDetails();
 
+    Map<String, Integer> getNombreCandidatsParPoste();
 
+    Map<String, Integer> getCandidatsAcceptesParPosteParExperience();
 }

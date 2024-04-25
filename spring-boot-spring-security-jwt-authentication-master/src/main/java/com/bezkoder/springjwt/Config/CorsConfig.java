@@ -14,6 +14,7 @@ public class CorsConfig implements WebMvcConfigurer {
                 .allowedMethods("GET", "POST", "PUT", "DELETE") // Autoriser les méthodes HTTP spécifiées
                 .allowedHeaders("Content-Type", "Authorization") // Autoriser les en-têtes spécifiés
                 .allowCredentials(true); // Autoriser les cookies avec les requêtes
+
     }
 }
 
