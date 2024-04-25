@@ -4,8 +4,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
+<<<<<<< HEAD
     <list default="true" id="2f30cad3-cfce-4735-8b2c-5333fd24202c" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+=======
+    <list default="true" id="ae64eeb0-54a8-4116-9166-29b89006b58d" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/java/com/bezkoder/springjwt/Service/ServicePerformance.java" beforeDir="false" afterPath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/java/com/bezkoder/springjwt/Service/ServicePerformance.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/java/com/bezkoder/springjwt/Service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/java/com/bezkoder/springjwt/Service/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/java/com/bezkoder/springjwt/controllers/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/java/com/bezkoder/springjwt/controllers/AuthController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/java/com/bezkoder/springjwt/controllers/PerformanceEmpController.java" beforeDir="false" afterPath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/java/com/bezkoder/springjwt/controllers/PerformanceEmpController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/java/com/bezkoder/springjwt/controllers/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/java/com/bezkoder/springjwt/controllers/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/java/com/bezkoder/springjwt/repository/NoteRepo.java" beforeDir="false" afterPath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/java/com/bezkoder/springjwt/repository/NoteRepo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/java/com/bezkoder/springjwt/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/java/com/bezkoder/springjwt/repository/UserRepository.java" afterDir="false" />
+>>>>>>> Employee
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,20 +46,20 @@
     <option name="showLibraryContents" value="true" />
     <option name="showVisibilityIcons" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "C:/Users/ktari/Coconsult-backend/spring-boot-spring-security-jwt-authentication-master",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "spring.configuration.checksum": "a571343804e23d1b8baf1f73aca9840c"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/ktari/Coconsult-backend/spring-boot-spring-security-jwt-authentication-master&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;spring.configuration.checksum&quot;: &quot;a571343804e23d1b8baf1f73aca9840c&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="SpringBootSecurityJwtApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
       <module name="spring-boot-security-jwt" />

@@ -1,5 +1,6 @@
 package com.bezkoder.springjwt.security;
 
+import com.bezkoder.springjwt.models.ERole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -47,14 +48,14 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
 //  public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
 //    authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
 //  }
-  
+
   @Bean
   public DaoAuthenticationProvider authenticationProvider() {
       DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-       
+
       authProvider.setUserDetailsService(userDetailsService);
       authProvider.setPasswordEncoder(passwordEncoder());
-   
+
       return authProvider;
   }
 
@@ -63,7 +64,7 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
 //  public AuthenticationManager authenticationManagerBean() throws Exception {
 //    return super.authenticationManagerBean();
 //  }
-  
+
   @Bean
   public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
     return authConfig.getAuthenticationManager();
@@ -91,11 +92,18 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
     http.csrf(csrf -> csrf.disable())
         .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-        .authorizeHttpRequests(auth -> 
+        .authorizeRequests(auth ->
           auth.requestMatchers("/api/auth/**").permitAll()
               .requestMatchers("/api/test/**").permitAll()
                   .requestMatchers("/api/users/**").permitAll()
-                  .requestMatchers("/api/users/forgotPassword").permitAll()
+                  .requestMatchers("/api/test/user" ).permitAll()
+
+                  .requestMatchers("/api/users/**").permitAll()
+                  .requestMatchers("/api/users/statistics/role").permitAll()
+
+                  .requestMatchers("/api/users/forgotPassword").permitAll() // Autoriser l'accès sans authentification
+                  .requestMatchers("/perfomanceEmpl/average-by-criteria").permitAll() // Autoriser l'accès sans authentification
+
                   .requestMatchers("/coconsult/**").permitAll()
                   .requestMatchers("/recrutement/**").permitAll()
                   .requestMatchers("/DetailsRect/**").permitAll()
@@ -121,6 +129,17 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
                             .requestMatchers("/resource/removeResource").permitAll()
                             .requestMatchers("/resource/resources/{id}/image").permitAll()
                             .requestMatchers("/resource/add-resource").permitAll()
+
+                  .requestMatchers("/absence/**").permitAll() // Autoriser l'accès sans authentification
+                  .requestMatchers("/cloudinary/**").permitAll() // Autoriser l'accès sans authentification
+                  .requestMatchers("/Conge/**").permitAll() // Autoriser l'accès sans authentification
+                  .requestMatchers("/contratEmpl/**").permitAll()
+                  .requestMatchers("/SalaireEmpl/**").permitAll() // Autoriser l'accès sans authentificat// Autoriser l'accès sans authentification
+                  .requestMatchers("/departement/**").permitAll() // Autoriser l'accès sans authentification
+//                  .requestMatchers("/employee/retrieveAll").hasAuthority("ROLE_ADMIN")// Autoriser l'accès sans authentification
+                  .requestMatchers("/employee/**").permitAll()// Autoriser l'accès sans authentification
+                  .requestMatchers("/Note/**").permitAll() // Autoriser l'accès sans authentification
+                  .requestMatchers("/perfomanceEmpl/**").permitAll()// Autoriser l'accès sans au
     .anyRequest().authenticated()
             );
     http.authenticationProvider(authenticationProvider());

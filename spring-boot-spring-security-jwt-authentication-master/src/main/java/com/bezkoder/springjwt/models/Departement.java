@@ -7,30 +7,24 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
+import java.io.Serializable;
+import java.util.Set;
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-
-
-public class Team {
+public class Departement implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long team_id;
-    private String team_name;
-    private boolean availability;
-    private double nbteam ;
-
+    private Long id_departement;
+    private String libelle ;
+    private int maxSaturation;
+    private int nbreEmpl;
+    @OneToMany(mappedBy="departement",fetch = FetchType.EAGER)
     @JsonIgnore
-    @OneToOne(mappedBy = "team")
-    private Project project;
 
-    @JsonIgnore
-    @OneToMany(mappedBy ="teams",fetch = FetchType.EAGER)
-    private List<Employee> employees;
-
+    Set<Employee> employees;
 
 }

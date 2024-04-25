@@ -186,10 +186,10 @@ public class ServiceImp implements Iservice {
                 // Vérifier si l'employé a été trouvé
                 if (employeeOptional.isPresent()) {
                     // Obtenir le nom d'utilisateur de l'employé
-                    String employeeUsername = employeeOptional.get().getUsername();
+                    Long employeeUsername = employeeOptional.get().getId_employe();
                     log.info("username de l'employé : {}", employeeUsername);
                     // Définir le nom d'utilisateur de l'employé comme propriétaire de la tâche
-                    task.setOwner(employeeUsername);
+                    task.setOwner("employeeUsername");
 
                     // Enregistrer la tâche mise à jour dans la base de données
                     taskRepository.save(task);

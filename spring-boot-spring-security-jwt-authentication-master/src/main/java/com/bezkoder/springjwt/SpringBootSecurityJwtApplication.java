@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 
 @SpringBootApplication
 
-@ComponentScan(basePackages = {"com.bezkoder.springjwt", "com.bezkoder.springjwt.Service"})
-@CrossOrigin(origins = "http://localhost:4200")
+//@ComponentScan(basePackages = {"com.bezkoder.springjwt", "com.bezkoder.springjwt.Service"})
+//@CrossOrigin(origins = "http://localhost:4200")
 @EnableScheduling
 public class SpringBootSecurityJwtApplication {
 

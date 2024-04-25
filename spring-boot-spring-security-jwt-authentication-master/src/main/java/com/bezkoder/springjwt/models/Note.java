@@ -7,30 +7,23 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
+import java.io.Serializable;
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-
-
-public class Team {
+public class Note implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long team_id;
-    private String team_name;
-    private boolean availability;
-    private double nbteam ;
-
+    private Long id_note ;
+    private float note ;
+    @Enumerated(EnumType.STRING)
+    private critereNote critere ;
+    @ManyToOne(cascade = CascadeType.ALL)
     @JsonIgnore
-    @OneToOne(mappedBy = "team")
-    private Project project;
-
-    @JsonIgnore
-    @OneToMany(mappedBy ="teams",fetch = FetchType.EAGER)
-    private List<Employee> employees;
+    Employee employeee;
 
 
 }
