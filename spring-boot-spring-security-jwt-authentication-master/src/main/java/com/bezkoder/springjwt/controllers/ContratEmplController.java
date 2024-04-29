@@ -2,6 +2,7 @@ package com.bezkoder.springjwt.controllers;
 
 import com.bezkoder.springjwt.Service.interfaces.IServiceContratEmpl;
 import com.bezkoder.springjwt.models.*;
+import com.google.zxing.WriterException;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -24,7 +25,7 @@ public class ContratEmplController {
 
 
     @PostMapping("/pdfgenerate")
-    public void generatePDF(HttpServletResponse response,@RequestBody ContratEmployee contrat) throws IOException {
+    public void generatePDF(HttpServletResponse response,@RequestBody ContratEmployee contrat) throws IOException, WriterException {
         response.setContentType("application/pdf");
         DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd:hh:mm:ss");
         String currentDateTime = dateFormatter.format(new Date());

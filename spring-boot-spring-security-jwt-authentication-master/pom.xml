@@ -21,6 +21,11 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>com.google.zxing</groupId>
+			<artifactId>core</artifactId>
+			<version>3.4.1</version> <!-- Or the latest version -->
+		</dependency>
+		<dependency>
 			<groupId>com.github.librepdf</groupId>
 			<artifactId>openpdf</artifactId>
 			<version>1.3.8</version>

@@ -44,5 +44,5 @@ public interface CongeRepo extends JpaRepository<Conge,Long> {
    List<Conge> findByCommentaireStartingWith(String commentaireStartingLetter);
 //List<Conge> findByCommentaireStartingWithOrTypeCStartingWith(String commentaireStartingLetter, String typeStartingLetter);
 
-    List<Conge> findByStatutC(String statutC);
+    List<Conge> findAllByStatutC(String statutC);
 }

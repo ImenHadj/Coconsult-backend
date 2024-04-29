@@ -3,6 +3,11 @@ package com.bezkoder.springjwt.Service;
 import com.bezkoder.springjwt.Service.interfaces.IServiceContratEmpl;
 import com.bezkoder.springjwt.models.*;
 import com.bezkoder.springjwt.repository.*;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.*;
+import com.lowagie.text.Image;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,8 +19,12 @@ import com.lowagie.text.*;
 import com.lowagie.text.Font;
 import com.lowagie.text.pdf.PdfWriter;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -145,16 +154,27 @@ public class ServiceContratEmpl implements IServiceContratEmpl {
     public Integer countByIsArchiveIsFalseAndDate_debutBetween(Date startDate, Date endDate) {
         return contratEmplRepo.countByIsArchiveIsFalseAndDateDebutBetween(startDate, endDate);
     }
-
-    public void export(HttpServletResponse response, ContratEmployee contrat) throws IOException {
+    public void export(HttpServletResponse response, ContratEmployee contrat) throws IOException, WriterException,DocumentException {
         Document document = new Document(PageSize.A4);
-        PdfWriter.getInstance(document, response.getOutputStream());
+        ByteArrayOutputStream qrCodeStream = new ByteArrayOutputStream();
 
+        PdfWriter.getInstance(document, response.getOutputStream());
         document.open();
-        Font fontTitle = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
-        fontTitle.setSize(18);
+
+        // Generate QR code data from contract details
+        String qrCodeData = "{\"rib\":\"" + contrat.getRib() + "\",\"socialSecurityNumber\":\"" + contrat.getNumeroSecuriteSociale() + "\",\"startDate\":\"" + contrat.getDate_debut() + "\",\"endDate\":\"" + contrat.getDate_fin() + "\"}";
+
+        // Generate QR code image
+        generateQRCodeImage(qrCodeData, qrCodeStream);
+
+        // Add QR code image to the PDF document
+        Image qrCodeImage = Image.getInstance(qrCodeStream.toByteArray());
+        qrCodeImage.scaleAbsolute(100, 100); // Adjust size as needed
+        document.add(qrCodeImage);
 
         // Adding contract details
+        Font fontTitle = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
+        fontTitle.setSize(18);
         Paragraph paragraphTitle = new Paragraph("Contract Details", fontTitle);
         paragraphTitle.setAlignment(Paragraph.ALIGN_CENTER);
         document.add(paragraphTitle);
@@ -175,4 +195,49 @@ public class ServiceContratEmpl implements IServiceContratEmpl {
         document.add(paragraphData);
         document.close();
     }
+
+    private void generateQRCodeImage(String text, OutputStream outputStream) throws WriterException, IOException {
+        int width = 200;
+        int height = 200;
+        QRCodeWriter qrCodeWriter = new QRCodeWriter();
+        BitMatrix bitMatrix = qrCodeWriter.encode(text, BarcodeFormat.QR_CODE, width, height);
+
+        BufferedImage qrCodeImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                qrCodeImage.setRGB(x, y, bitMatrix.get(x, y) ? Color.BLACK.getRGB() : Color.WHITE.getRGB());
+            }
+        }
+
+        ImageIO.write(qrCodeImage, "png", outputStream);
+    }
+//    public void export(HttpServletResponse response, ContratEmployee contrat) throws IOException {
+//        Document document = new Document(PageSize.A4);
+//        PdfWriter.getInstance(document, response.getOutputStream());
+//
+//        document.open();
+//        Font fontTitle = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
+//        fontTitle.setSize(18);
+//
+//        // Adding contract details
+//        Paragraph paragraphTitle = new Paragraph("Contract Details", fontTitle);
+//        paragraphTitle.setAlignment(Paragraph.ALIGN_CENTER);
+//        document.add(paragraphTitle);
+//
+//        Font fontData = FontFactory.getFont(FontFactory.HELVETICA);
+//        fontData.setSize(12);
+//        Paragraph paragraphData = new Paragraph();
+//        paragraphData.setFont(fontData);
+//        paragraphData.add("Rib: " + contrat.getRib() + "\n");
+//        paragraphData.add("Social Security Number: " + contrat.getNumeroSecuriteSociale() + "\n");
+//        paragraphData.add("Start Date: " + contrat.getDate_debut() + "\n");
+//        paragraphData.add("End Date: " + contrat.getDate_fin() + "\n");
+//        paragraphData.add("Contract Type: " + contrat.getTypeCE() + "\n");
+//        paragraphData.add("Weekly Duration: " + contrat.getDuree_hebdomadaire() + " hours\n");
+//        paragraphData.add("Base Salary: " + contrat.getSalaire_base() + " TD\n");
+//        paragraphData.add("Price of Hour: " + contrat.getMontant_heures_supplementaires() + " TD\n");
+//        paragraphData.add("Is Archived: " + contrat.getIsArchive() + "\n");
+//        document.add(paragraphData);
+//        document.close();
+//    }
 }
