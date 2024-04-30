@@ -103,7 +103,7 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
 
                   .requestMatchers("/api/users/forgotPassword").permitAll() // Autoriser l'accès sans authentification
                   .requestMatchers("/perfomanceEmpl/average-by-criteria").permitAll() // Autoriser l'accès sans authentification
-
+                  .requestMatchers("/Clients/**").permitAll()
                   .requestMatchers("/coconsult/**").permitAll()
                   .requestMatchers("/recrutement/**").permitAll()
                   .requestMatchers("/DetailsRect/**").permitAll()
