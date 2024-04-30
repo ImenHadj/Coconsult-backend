@@ -46,4 +46,8 @@ public class Project {
     @JsonIgnore
     @ManyToMany
     List<Resources> resources;
+
+    @JsonIgnore
+    @ManyToOne
+    Client client;
 }

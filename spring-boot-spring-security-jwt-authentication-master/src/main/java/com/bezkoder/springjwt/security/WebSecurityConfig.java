@@ -129,7 +129,8 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
                             .requestMatchers("/resource/removeResource").permitAll()
                             .requestMatchers("/resource/resources/{id}/image").permitAll()
                             .requestMatchers("/resource/add-resource").permitAll()
-
+                  .requestMatchers("/Clients/**").permitAll()
+                  .requestMatchers("/Clients/addpaiment/**").permitAll()
                   .requestMatchers("/absence/**").permitAll() // Autoriser l'accès sans authentification
                   .requestMatchers("/cloudinary/**").permitAll() // Autoriser l'accès sans authentification
                   .requestMatchers("/Conge/**").permitAll() // Autoriser l'accès sans authentification

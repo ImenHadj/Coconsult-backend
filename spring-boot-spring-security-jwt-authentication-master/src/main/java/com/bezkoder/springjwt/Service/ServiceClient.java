@@ -2,12 +2,12 @@ package com.bezkoder.springjwt.Service;
 
 import com.bezkoder.springjwt.models.Client;
 import com.bezkoder.springjwt.models.*;
+import com.bezkoder.springjwt.notifdto.MonthlyPaymentDTO;
 import com.bezkoder.springjwt.repository.*;
 import com.bezkoder.springjwt.notifdto.depassagefacture;
 import com.bezkoder.springjwt.notifdto.paymentpercentage;
 import com.bezkoder.springjwt.notifdto.rempcalendrier;
 import jakarta.transaction.Transactional;
-import com.bezkoder.springjwt.Service.mailconfigg;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -306,6 +306,22 @@ public List<paymentpercentage> percentage(){
     List<paymentpercentage> percentage = paimentRep.getPaymentTypePercentages();
     return  percentage;
 }
+
+    @Override
+    public List<MonthlyPaymentDTO> getTotalPaymentsByMonth() {
+        return paimentRep.getTotalPaymentsByMonth();
+    }
+
+    @Override
+    public List<Client> getallclientsbyproductowner(){
+    return clientRep.findAll();
+    }
+@Override
+    public List<Project> getprojbyclient(Long id){
+    Client client = clientRep.findById(id).orElse(null);
+    return client.getProjects();
+}
+
 }
 
 
