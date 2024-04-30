@@ -5,20 +5,30 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ae64eeb0-54a8-4116-9166-29b89006b58d" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/java/com/bezkoder/springjwt/Service/TwilioInitializer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/java/com/bezkoder/springjwt/Service/TwilioService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/java/com/bezkoder/springjwt/Service/ServiceConge.java" beforeDir="false" afterPath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/java/com/bezkoder/springjwt/Service/ServiceConge.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/java/com/bezkoder/springjwt/Service/ServiceContratEmpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/java/com/bezkoder/springjwt/Service/ServiceContratEmpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/java/com/bezkoder/springjwt/Service/interfaces/IServiceContratEmpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/java/com/bezkoder/springjwt/Service/interfaces/IServiceContratEmpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/java/com/bezkoder/springjwt/controllers/ContratEmplController.java" beforeDir="false" afterPath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/java/com/bezkoder/springjwt/controllers/ContratEmplController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/java/com/bezkoder/springjwt/repository/CongeRepo.java" beforeDir="false" afterPath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/java/com/bezkoder/springjwt/repository/CongeRepo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/java/com/bezkoder/springjwt/Service/IServiceClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/java/com/bezkoder/springjwt/Service/IServiceClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/java/com/bezkoder/springjwt/Service/RhService.java" beforeDir="false" afterPath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/java/com/bezkoder/springjwt/Service/RhService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/java/com/bezkoder/springjwt/Service/ServiceClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/java/com/bezkoder/springjwt/Service/ServiceClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/java/com/bezkoder/springjwt/Service/ServiceSalaire.java" beforeDir="false" afterPath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/java/com/bezkoder/springjwt/Service/ServiceSalaire.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/java/com/bezkoder/springjwt/controllers/ClientController.java" beforeDir="false" afterPath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/java/com/bezkoder/springjwt/controllers/ClientController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/java/com/bezkoder/springjwt/models/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/java/com/bezkoder/springjwt/models/Client.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/java/com/bezkoder/springjwt/models/Project.java" beforeDir="false" afterPath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/java/com/bezkoder/springjwt/models/Project.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/target/classes/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -57,6 +67,11 @@
     &quot;spring.configuration.checksum&quot;: &quot;a571343804e23d1b8baf1f73aca9840c&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.bezkoder.springjwt.Service" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="SpringBootSecurityJwtApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
       <module name="spring-boot-security-jwt" />
@@ -81,7 +96,8 @@
       <workItem from="1714216825499" duration="607000" />
       <workItem from="1714393945736" duration="1928000" />
       <workItem from="1714397819873" duration="299000" />
-      <workItem from="1714400430043" duration="6796000" />
+      <workItem from="1714400430043" duration="14130000" />
+      <workItem from="1714438810053" duration="2824000" />
     </task>
     <servers />
   </component>

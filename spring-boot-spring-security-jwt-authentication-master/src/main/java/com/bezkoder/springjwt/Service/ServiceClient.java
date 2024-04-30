@@ -306,6 +306,16 @@ public List<paymentpercentage> percentage(){
     List<paymentpercentage> percentage = paimentRep.getPaymentTypePercentages();
     return  percentage;
 }
+
+    @Override
+    public List<Client> getallclientsbyproductowner(){
+        return clientRep.findAll();
+    }
+    @Override
+    public List<Project> getprojbyclient(Long id){
+        Client client = clientRep.findById(id).orElse(null);
+        return client.getProjects();
+    }
 }
 
 

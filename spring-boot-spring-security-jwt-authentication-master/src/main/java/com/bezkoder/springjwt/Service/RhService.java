@@ -264,6 +264,52 @@ public class RhService  implements  IRhService {
 
 
 
-
+//    public DetailRecrutement proposerDateEntretien(Long idCandidat, DetailRecrutement detailRecrt) {
+//        Candidat candidat = candidatRepo.findById(idCandidat).get();
+//        candidat.setDetailRecrutement(detailRecrt);
+//        detailRecrt.setCandidat(candidat);
+//
+//        // Enregistrer le détail de recrutement
+//        detailRecrt = detailsRecRepo.save(detailRecrt);
+//        candidatRepo.save(candidat);
+//
+//        // Récupérer le numéro de téléphone, la date d'entretien, nom et prénom
+//        String numeroCandidat = candidat.getTelephone();
+//        LocalDate dateEntretien = detailRecrt.getDateEntretien();
+//        String nomCandidat = candidat.getNom();
+//        String prenomCandidat = candidat.getPrenom();
+//
+//        // Initialiser Twilio
+//        String accountSid = "AC3f533a6deb2b1e1a731cb8304b5f613d";
+//        String authToken = "429783ec8e700d7e898e16129f3d19b1";
+//        Twilio.init(accountSid, authToken);
+//
+//        // Numéro Twilio pour envoyer le SMS
+//        String fromNumber = "+13344014268";
+//
+//        // Créer un message avec la date d'entretien, nom et prénom du candidat
+//        String body = "Bonjour " + prenomCandidat + " " + nomCandidat +
+//                "Votre entretien est prévu pour le " + dateEntretien + ".";
+//
+//        // Envoyer le SMS
+//        Message message = Message.creator(
+//                new PhoneNumber(numeroCandidat),
+//                new PhoneNumber(fromNumber),
+//                body
+//        ).create();
+//
+//        System.out.println("Message envoyé : " + message.getSid());
+//
+//        // Retourner le détail de recrutement mis à jour
+//        return detailRecrt;
+//    }
+//    public void sendSms(String to, String from, String body) {
+//        Message message = Message.creator(
+//                new PhoneNumber(to),
+//                new PhoneNumber(from),
+//                body
+//        ).create();
+//
+//    }
 
 }

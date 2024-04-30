@@ -73,4 +73,7 @@ public interface IServiceClient {
 
     //send reminder
 
+    public List<Client> getallclientsbyproductowner();
+
+    public List<Project> getprojbyclient(Long id);
 }

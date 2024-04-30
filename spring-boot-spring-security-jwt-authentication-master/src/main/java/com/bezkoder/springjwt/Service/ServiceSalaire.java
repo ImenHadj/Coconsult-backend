@@ -193,7 +193,7 @@ public class ServiceSalaire implements IServiceSalaire {
 
         List<SalaireEmployee> salaries = salaireEmployeeService.findByDateBetween(startDate, endDate);
         if (salaries.isEmpty()) {
-            return ResponseEntity.ok("No salary records found for the specified month.");
+            return ResponseEntity.ok(Collections.emptyList());
         }
 
         Map<String, Map<String, Object>> report = new HashMap<>();
@@ -215,7 +215,7 @@ public class ServiceSalaire implements IServiceSalaire {
             employeeDetails.put("TotalSalary", totalSalary);
 
             Map<String, Double> components = (Map<String, Double>) employeeDetails.get("Salary Details");
-            components.put("TotalSalaire", components.getOrDefault("BaseSalary", 0.0) + salary.getTotal_salaire());
+//            components.put("TotalSalaire", components.getOrDefault("BaseSalary", 0.0) + salary.getTotal_salaire());
             components.put("Bonuses", components.getOrDefault("Bonuses", 0.0) + salary.getPrime());
             components.put("Supplement Hour", components.getOrDefault("Supplement Hour", 0.0) + salary.getHeures_supplementaires());
         }

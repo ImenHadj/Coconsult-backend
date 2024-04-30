@@ -136,4 +136,13 @@ public Long addfacture(@RequestBody Facture f, @PathVariable Long clientId,@Path
           return  iServiceClient.percentage();
     }
 
+    @GetMapping("/clientsbyprod")
+    public List<Client> clientsbyprod(){
+        return iServiceClient.getallclientsbyproductowner();
+    }
+    @GetMapping("/projclient/{id}")
+    public List<Project>  projbyidclient(@PathVariable Long id){
+        return iServiceClient.getprojbyclient(id);
+    }
+
 }
