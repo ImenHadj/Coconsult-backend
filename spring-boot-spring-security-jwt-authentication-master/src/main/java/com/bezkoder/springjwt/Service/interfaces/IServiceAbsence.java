@@ -15,5 +15,6 @@ public interface IServiceAbsence {
     public List<Absence> retrieveAbsencesForToday();
     public List<Absence> retrieveAll();
     public Absence getAbsence(Long id);
+    public ResponseEntity<?> a3tiniEsm(Absence absence);
 
 }

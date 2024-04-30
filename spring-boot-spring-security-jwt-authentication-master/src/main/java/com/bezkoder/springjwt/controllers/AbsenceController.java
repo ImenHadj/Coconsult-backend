@@ -19,6 +19,10 @@ public class AbsenceController {
     public ResponseEntity<Long> addAbsence(@RequestBody Absence p, @PathVariable ("id") Long id){
         return iServiceAbsence.addAbsence(p,id);
     }
+    @GetMapping("/givename")
+    public ResponseEntity<?> givename(@RequestBody Absence p){
+        return iServiceAbsence.a3tiniEsm(p);
+    }
     @GetMapping("/search")
     public ResponseEntity<List<Absence>> searchCongesStartingWithLetter(
             @RequestParam String startingLetter) {

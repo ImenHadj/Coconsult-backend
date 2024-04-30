@@ -2,6 +2,8 @@ package com.bezkoder.springjwt.controllers;
 
 import com.bezkoder.springjwt.Service.interfaces.IServiceContratEmpl;
 import com.bezkoder.springjwt.models.*;
+import com.google.zxing.WriterException;
+import com.lowagie.text.DocumentException;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -23,8 +25,11 @@ public class ContratEmplController {
     IServiceContratEmpl iServiceContratEmpl;
 
 
-    @PostMapping("/pdfgenerate")
-    public void generatePDF(HttpServletResponse response,@RequestBody ContratEmployee contrat) throws IOException {
+    @PostMapping("/pdfgenerate/{id}")
+    public void generatePDF(HttpServletResponse response,
+            @RequestBody ContratEmployee contrat,
+            @PathVariable("id") Long id) throws IOException,
+            WriterException, DocumentException {
         response.setContentType("application/pdf");
         DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd:hh:mm:ss");
         String currentDateTime = dateFormatter.format(new Date());
@@ -33,7 +38,7 @@ public class ContratEmplController {
         String headerValue = "attachment; filename=pdf_" + currentDateTime + ".pdf";
         response.setHeader(headerKey, headerValue);
 
-        iServiceContratEmpl.export(response,contrat);
+        iServiceContratEmpl.export(response,contrat,id);
     }
     @PostMapping("/saveContratEmployee/{id}")
     public ResponseEntity<?> addContratEmployee(@RequestBody ContratEmployee p, @PathVariable("id") Long id){

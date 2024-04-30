@@ -19,6 +19,7 @@ public class ServiceAbsence implements IServiceAbsence {
 
     AbsenceRepo absenceRepo;
     EmployeeRepo employeeRepo;
+    UserRepository userRepository;
 
     @Override
     public ResponseEntity<Long> addAbsence(Absence absence, Long id) {
@@ -31,8 +32,18 @@ public class ServiceAbsence implements IServiceAbsence {
 
     public List<Absence> searchAbsenceByStartingLetters(String StartingLetter) {
 //        return congeRepo.findByCommentaireStartingWithOrJustificationStartingWith(StartingLetter, StartingLetter);
+
         return absenceRepo.findByMotifStartingWith(StartingLetter);
 
+    }
+    public ResponseEntity<?> a3tiniEsm(Absence absence){
+        Long id = absence.getEmp().getUserId();
+        User user = userRepository.findById(id).orElse(null); // Use findById().orElse(null) to handle the case where the user may not exist
+        if (user != null) {
+            return ResponseEntity.ok(user.getUsername());
+        } else {
+            return ResponseEntity.notFound().build(); // If the user is not found, return a not found response
+        }
     }
 
     @Override

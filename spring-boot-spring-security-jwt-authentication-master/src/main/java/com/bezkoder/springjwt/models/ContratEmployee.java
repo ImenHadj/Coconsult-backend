@@ -16,7 +16,11 @@ public class ContratEmployee implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_contrat_e;
+
+    @Column(unique = true)
     private String rib;
+
+    @Column(unique = true)
     private Long numeroSecuriteSociale;
     @Temporal(TemporalType.DATE)
     private LocalDate date_debut;

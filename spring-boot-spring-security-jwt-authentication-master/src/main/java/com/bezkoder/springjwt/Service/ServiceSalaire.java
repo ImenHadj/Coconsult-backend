@@ -193,8 +193,9 @@ public class ServiceSalaire implements IServiceSalaire {
 
         List<SalaireEmployee> salaries = salaireEmployeeService.findByDateBetween(startDate, endDate);
         if (salaries.isEmpty()) {
-            return ResponseEntity.ok("No salary records found for the specified month.");
+            return ResponseEntity.ok(Collections.emptyList());
         }
+
 
         Map<String, Map<String, Object>> report = new HashMap<>();
 
