@@ -21,4 +21,6 @@ public interface IServiceConge {
     public Map<CongeType, Integer> calculerNombreCongesParType();
     public List<Conge> searchCongesByStartingLetters(String startingLette);
     public List<Conge> filterByStatus(CongeStatut status);
+
+    public  ResponseEntity<?> SendEmailConge(Long id, Conge conge);
 }

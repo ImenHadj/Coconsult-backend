@@ -42,6 +42,12 @@ public class congeController {
         return iServiceConge.saveConge(p,id);
     }
 
+    @PostMapping("/SendEmailConge/{id}")
+    public ResponseEntity<?> SendEmailConge(@PathVariable ("id") Long id,@RequestBody Conge p){
+        return iServiceConge.SendEmailConge(id,p);
+    }
+
+
     @PutMapping("/updateConge/{id}")
     public ResponseEntity<?> updateConge(@PathVariable ("id") Long id,@RequestBody Conge p) throws Exception {
         return iServiceConge.updateConge(id,p);

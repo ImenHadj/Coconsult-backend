@@ -5,8 +5,11 @@ import com.bezkoder.springjwt.models.*;
 import com.bezkoder.springjwt.repository.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -24,8 +27,42 @@ public class ServiceConge implements IServiceConge {
     CongeRepo congeRepo;
     EmployeeRepo employeeRepo;
 
+    UserRepository userRepository;
+
+    private JavaMailSender emailSender;
+
+    public  ResponseEntity<?> SendEmailConge(Long id, Conge conge) {
+        Employee employee = employeeRepo.findById(id).get();
+        List<User> users = userRepository.findAll();
+        User user = new User();
+
+        for (User u : users){
+            if(employee.getUserId() ==u.getId()){
+                user=u;
+            }
+        }
+
+        SimpleMailMessage message  = new SimpleMailMessage();
+        message.setFrom("gramiaziz9@gamil.com");
+        message.setSubject("Your Leave request");
+        message.setTo(user.getEmail());
+        message.setText("Dear "+user.getUsername()+ "," +
+                "\n\nYour Leave request with ID " + conge.getId_conge() +
+                " is "+conge.getStatutC()+"."+"\n\nPlease take necessary actions.\n\nSincerely,\nYour Company");
+        emailSender.send(message);
+        return ResponseEntity.ok( conge.getId_conge());
+    }
+
     @Override
     public Set<Conge> getCongesByEmp(Long id) {
+        User user = userRepository.findById(id).get();
+        List<Employee> employees = employeeRepo.findAll();
+        Employee employee = new Employee();
+        for (Employee u : employees){
+            if(u.getUserId() ==id){
+                employee=u;
+            }
+        }
         Employee emp = employeeRepo.findById(id).get();
         return emp.getConges();
     }
@@ -99,7 +136,6 @@ public class ServiceConge implements IServiceConge {
         Employee employee = conge.getEmployee();
         if (isCongeRequestValidUpdate(updatedConge,employee.getId_employe(),id)) {
             conge.setCommentaire(updatedConge.getCommentaire());
-//            conge.setJustification(updatedConge.getJustification());
             conge.setDate_debut(updatedConge.getDate_debut());
             conge.setDate_fin(updatedConge.getDate_fin());
             conge.setStatutC(updatedConge.getStatutC());
