@@ -5,9 +5,11 @@ import com.bezkoder.springjwt.Service.interfaces.ISerivceNote;
 import com.bezkoder.springjwt.models.*;
 
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @AllArgsConstructor
@@ -40,6 +42,16 @@ public class NoteController {
     @GetMapping("/retrieveAll")
     public List<Note> retrieveAll(){
         return iSerivceNote.retrieveAll();
+    }
+
+    @GetMapping("/getNotes/{id}")
+    public Set<Note> getCongesByEmp(@PathVariable("id") Long id){
+        return iSerivceNote.getNotesByEmp(id);
+    }
+
+    @GetMapping("/getUsername/{id}")
+    public ResponseEntity<?> getUsername(@PathVariable("id") Long id){
+        return iSerivceNote.getUserNameByIdUSer(id);
     }
 
 }
