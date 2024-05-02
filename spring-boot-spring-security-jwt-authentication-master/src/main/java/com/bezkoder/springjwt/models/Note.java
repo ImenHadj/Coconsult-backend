@@ -21,6 +21,7 @@ public class Note implements Serializable {
     private float note ;
     @Enumerated(EnumType.STRING)
     private critereNote critere ;
+    private Long idUser;
     @ManyToOne(cascade = CascadeType.ALL)
     @JsonIgnore
     Employee employeee;
