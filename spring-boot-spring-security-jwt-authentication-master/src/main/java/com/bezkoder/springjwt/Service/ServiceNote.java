@@ -102,6 +102,18 @@ public class ServiceNote implements ISerivceNote {
 
     public ResponseEntity<?> getUserNameByIdUSer(Long id) {
         User user = userRepository.findById(id).get();
-        return ResponseEntity.ok(user.getUsername());
+        return ResponseEntity.ok(user);
+    }
+
+    public ResponseEntity<?> getUserNameByIdEmpl(Long id) {
+        Employee employee = employeeRepo.findById(id).get();
+        List<User> users = userRepository.findAll();
+        User user = new User();
+        for (User u :users){
+             if(u.getId() ==employee.getUserId()){
+                 user=u;
+             }
+        }
+        return ResponseEntity.ok(user);
     }
 }

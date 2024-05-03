@@ -54,4 +54,9 @@ public class NoteController {
         return iSerivceNote.getUserNameByIdUSer(id);
     }
 
+    @GetMapping("/getUserByIdEmpl/{id}")
+    public ResponseEntity<?> getUserByIdEmpl(@PathVariable("id") Long id){
+        return iSerivceNote.getUserNameByIdEmpl(id);
+    }
+
 }

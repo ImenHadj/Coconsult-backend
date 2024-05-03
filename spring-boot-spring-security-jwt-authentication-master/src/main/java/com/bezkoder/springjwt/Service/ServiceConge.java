@@ -12,10 +12,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -163,6 +160,12 @@ public class ServiceConge implements IServiceConge {
         congeRepo.deleteById(id);
     }
 
+//    public ResponseEntity<?> SearchConge(String search) {
+//        List<Conge> anis= new ArrayList<>();
+//        if(search!=null){
+//            anis=congeRepo.findByCommentaireStartingWith(search);
+//        }
+//        return ResponseEntity.ok( conge.getId_conge());    }
     @Override
     public Conge getConge(Long id) {
 

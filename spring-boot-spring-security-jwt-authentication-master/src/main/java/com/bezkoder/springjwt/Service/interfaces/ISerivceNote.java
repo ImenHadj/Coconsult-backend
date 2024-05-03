@@ -16,4 +16,6 @@ public interface ISerivceNote {
     public Set<Note> getNotesByEmp(Long id);
 
     public ResponseEntity<?> getUserNameByIdUSer(Long id);
+
+    public ResponseEntity<?> getUserNameByIdEmpl(Long id);
 }
