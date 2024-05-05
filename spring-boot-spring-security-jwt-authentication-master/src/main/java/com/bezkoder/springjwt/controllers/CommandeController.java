@@ -2,6 +2,8 @@ package com.bezkoder.springjwt.controllers;
 
 import com.bezkoder.springjwt.Service.ICommandeService;
 import com.bezkoder.springjwt.models.Commande;
+import com.bezkoder.springjwt.models.Fournisseur;
+import com.bezkoder.springjwt.models.ResourcesCategorie;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +24,14 @@ public class CommandeController {
     public List<Commande> getCommandes() {
         List<Commande> commandeList = commandeService.retrieveAllCommandes();
         return commandeList;
+    }
+
+    @GetMapping("/retrieve-fournisseurByCateg/{categorie}")
+    @ResponseBody
+    public List<Fournisseur> retrieveFournisseurByCategorie( @PathVariable("categorie") ResourcesCategorie resourcesCategorie){
+        List<Fournisseur> fournisseurList = commandeService.retrieveFournisseurByCategorie(resourcesCategorie);
+        return  fournisseurList ;
+
     }
 
 

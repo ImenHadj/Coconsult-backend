@@ -123,12 +123,15 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
     .requestMatchers("/","/api/new-resource/**").permitAll() // Autoriser l'accès sans authentification
                             .requestMatchers("/stock/**").permitAll()
                             .requestMatchers("/commande/**").permitAll()
+                            .requestMatchers("/commande/retrieve-fournisseurByCateg/{categorie}").permitAll()
                             .requestMatchers("/fournisseur/**").permitAll()
                             .requestMatchers("/reclamation/**").permitAll()
                             .requestMatchers("/resource/**").permitAll()
                             .requestMatchers("/resource/removeResource").permitAll()
                             .requestMatchers("/resource/resources/{id}/image").permitAll()
                             .requestMatchers("/resource/add-resource").permitAll()
+                            .requestMatchers("/resource/{projectId}/resources").permitAll()
+                            .requestMatchers("/resource//projects/{projectId}").permitAll()
 
                   .requestMatchers("/absence/**").permitAll() // Autoriser l'accès sans authentification
                   .requestMatchers("/cloudinary/**").permitAll() // Autoriser l'accès sans authentification

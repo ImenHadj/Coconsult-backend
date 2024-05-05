@@ -1,9 +1,6 @@
 package com.bezkoder.springjwt.Service;
 
-import com.bezkoder.springjwt.models.Commande;
-import com.bezkoder.springjwt.models.Fournisseur;
-import com.bezkoder.springjwt.models.StatusCommande;
-import com.bezkoder.springjwt.models.Stock;
+import com.bezkoder.springjwt.models.*;
 import com.bezkoder.springjwt.repository.CommandeRepository;
 import com.bezkoder.springjwt.repository.FournisseurRepository;
 import com.bezkoder.springjwt.repository.StockRepository;
@@ -106,6 +103,10 @@ public class CommandeService implements ICommandeService {
 
 
         }
+    }
+
+    public List<Fournisseur> retrieveFournisseurByCategorie(ResourcesCategorie resourcesCategorie){
+        return fournisseurRepository.findFournisseursByTypeFournisseur(resourcesCategorie) ;
     }
 
 }
