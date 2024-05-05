@@ -11,6 +11,7 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -19,6 +20,9 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -37,8 +41,10 @@ public class ServiceClient implements IServiceClient{
     PaimentRep paimentRep;
     @Autowired
     Notifcontratrep notifcontratrep;
-
-
+    @Autowired
+    MeetRep meetRep;
+    @Autowired
+    ProjectRepository projectRepository;
     @Autowired
     private JavaMailSender emailSender;
     @Override
@@ -102,7 +108,8 @@ public class ServiceClient implements IServiceClient{
         LocalDateTime dueDateThreshold = today.plusDays(daysThreshold);
         return clientRep.findClientsWithDueFactures(today, dueDateThreshold);
     }
-    /*fcnt avance1 pour le calendrier*/
+    /*fcnt avance1 pour le calendrier */
+    //facture "due date" entre aujourdhuit et 7 ou 30 jours
     public List<rempcalendrier> fncavnace1(int daysThreshold) {
         LocalDateTime today = LocalDateTime.now();
         LocalDateTime dueDateThreshold = today.plusDays(daysThreshold);
@@ -269,8 +276,8 @@ public List<Contract> sendContractExpirationReminders() {
         message.setFrom("gramiaziz9@gamil.com");
         message.setSubject("Contract Expiration Reminder");
         message.setTo(toEmail);
-        message.setText("Dear Client,"+ contract.getClient().getNom()+ " " + contract.getClient().getPrenom()+"\n\nYour contract with ID " + contract.getIdContract() +
-                    " is expiring soon. Please take necessary actions.\n\nSincerely,\nYour Company");
+        message.setText("Dear Client,"+ contract.getClient().getNom()+ " " + contract.getClient().getPrenom()+"\n\nYour contract : " + contract.getTypeContrat() +
+                    " is expiring soon. Please take necessary actions.\n\nSincerely,\n Coconsult");
         emailSender.send(message);
 
     }
@@ -309,7 +316,21 @@ public List<paymentpercentage> percentage(){
 
     @Override
     public List<MonthlyPaymentDTO> getTotalPaymentsByMonth() {
-        return paimentRep.getTotalPaymentsByMonth();
+        List<MonthlyPaymentDTO> monthpaiment = paimentRep.getTotalPaymentsByMonth();
+
+        List<Integer> monthexistant = new ArrayList<>();
+
+        monthpaiment.forEach(existant->{
+            monthexistant.add(existant.getMonth());
+            });
+        for (int i = 1; i <= 12; i++) {
+            if (!monthexistant.contains(i)) {
+                monthpaiment.add(new MonthlyPaymentDTO(i, 0, BigDecimal.ZERO));
+            }
+        }
+
+        Collections.sort(monthpaiment, Comparator.comparingInt(MonthlyPaymentDTO::getMonth));
+    return monthpaiment;
     }
 
     @Override
@@ -321,7 +342,14 @@ public List<paymentpercentage> percentage(){
     Client client = clientRep.findById(id).orElse(null);
     return client.getProjects();
 }
-
+@Override
+public List<Project> getProjectofPO(Long id){
+    return  projectRepository.findByUserId(id);
+}
+@Override
+    public Long addhistory(MeetHistory history){
+    return meetRep.save(history).getId();
+}
 }
 
 

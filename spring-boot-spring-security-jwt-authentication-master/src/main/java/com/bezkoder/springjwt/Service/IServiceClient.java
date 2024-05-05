@@ -78,6 +78,10 @@ public interface IServiceClient {
 
     List<Project> getprojbyclient(Long id);
 
+    List<Project> getProjectofPO(Long id);
+
+    Long addhistory(MeetHistory history);
+
 
     //send reminder
 

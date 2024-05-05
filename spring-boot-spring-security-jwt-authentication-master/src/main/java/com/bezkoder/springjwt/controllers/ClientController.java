@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/*@CrossOrigin(origins = "*")*/
+
 @RestController
 @RequestMapping("/Clients")
 public class ClientController {
@@ -147,5 +147,16 @@ public class ClientController {
     @GetMapping("/projclient/{id}")
     public List<Project>  projbyidclient(@PathVariable Long id){
         return iServiceClient.getprojbyclient(id);
+    }
+
+    @PostMapping("/addhistory")
+    @ResponseBody
+    public Long addhistory(@RequestBody MeetHistory history){
+        return iServiceClient.addhistory(history);
+    }
+    @GetMapping("/getprojectforPO/{id}")
+    @ResponseBody
+    public List<Project>getallproj(@PathVariable Long id){
+        return iServiceClient.getProjectofPO(id);
     }
 }

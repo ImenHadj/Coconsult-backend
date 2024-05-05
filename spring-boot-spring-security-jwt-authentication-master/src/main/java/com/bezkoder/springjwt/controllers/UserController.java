@@ -19,7 +19,7 @@ import java.util.Map;
 import java.util.Random;
 
 //@CrossOrigin(origins = "*", maxAge = 3600)
-@CrossOrigin(origins = "*")
+
 @RestController
 @RequestMapping("/api/users")
 public class UserController {

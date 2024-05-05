@@ -29,6 +29,8 @@ public class Productowner implements Serializable {
 
     @OneToMany(mappedBy= "productowner", fetch = FetchType.EAGER)
     private List<Client> clients;
+    @OneToMany(mappedBy= "productowner", fetch = FetchType.EAGER)
+    private List<Project> projects;
 
 
 }

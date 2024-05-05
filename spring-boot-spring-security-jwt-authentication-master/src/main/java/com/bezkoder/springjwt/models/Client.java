@@ -40,7 +40,7 @@ public class Client implements Serializable {
     @OneToMany(mappedBy= "client", fetch = FetchType.EAGER)
     private List<Contract> contracts;
 
-
+    @JsonIgnore
     @OneToMany(mappedBy= "client", fetch = FetchType.EAGER)
     private List<Project> projects;
 

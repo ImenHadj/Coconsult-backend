@@ -3,6 +3,7 @@ package com.bezkoder.springjwt.Service;
 import com.bezkoder.springjwt.models.*;
 import com.bezkoder.springjwt.repository.*;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.crossstore.ChangeSetPersister;
@@ -24,12 +25,11 @@ public class ServiceImp implements Iservice {
     TaskRepository taskRepository;
     TeamRepository teamRepository;
     EmployeeRepository employeeRepository;
+    UserRepository userRepository;
 
     public Project addProject(Project p) {
         return projectRepository.save(p);
     }
-
-
     public Project updateProject(Long projectId, Project updatedProject) {
         Project existingProject = projectRepository.findById(projectId)
                 .orElseThrow(() -> new NoSuchElementException("Aucun projet trouvé avec l'ID : " + projectId));
@@ -47,12 +47,10 @@ public class ServiceImp implements Iservice {
         // Enregistrer les modifications dans la base de données
         return projectRepository.save(existingProject);
     }
-
     public void removeProject(Long project_id) {
         log.debug("debugging");
         projectRepository.deleteById(project_id);
     }
-
     public List<Project> getAllProjects() {
         return projectRepository.findAll();
     }
@@ -83,19 +81,6 @@ public class ServiceImp implements Iservice {
     public List<Task> getAllTasks() {
         return taskRepository.findAll();
     }
-
-
-    //Employee employee = employeeRepository.findById(id_employe).orElseThrow();
-    // Team team = project.getTeam();
-    // employee.setTeams(team);
-    // task.setProject(project);
-    //if (team == null) {
-    // log.info("team with name "+ team.getTeam_name()+" not found ");
-    // }
-    //task.setOwner(employee.getId_employe());
-
-
-
     public Task updateTask(Long taskId, Task updatedTask) {
         Task existingTask = taskRepository.findById(taskId)
                 .orElseThrow(() -> new NoSuchElementException("Aucune tache trouvé avec l'ID : " + taskId));
@@ -127,11 +112,6 @@ public class ServiceImp implements Iservice {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-
-
-
-
-
     public void deleteTask(Long taskId) {
         Task task = null;
         try {
@@ -150,6 +130,8 @@ public class ServiceImp implements Iservice {
         log.debug("debugging");
         taskRepository.deleteById(taskId);
     }
+
+
 
 
    /* public Consultant addConsultantAndAssignToProject(Long projectId, Consultant consultant) {
@@ -201,48 +183,49 @@ public class ServiceImp implements Iservice {
             }
 
         }}
-        public List<Task> getAllTasksByEmployee(String username ) {
-            List<Task> tasks = taskRepository.findAll();
-            List<Task> tasksByEmployee = new ArrayList<>();
 
-            for (Task t : tasks) {
-                if (t.getOwner() != null && t.getOwner().equals(username)) {
-                    tasksByEmployee.add(t);
-                }
+    public List<Task> getAllTasksByEmployee(String username ) {
+        List<Task> tasks = taskRepository.findAll();
+        List<Task> tasksByEmployee = new ArrayList<>();
+
+        for (Task t : tasks) {
+            if (t.getOwner() != null && t.getOwner().equals(username)) {
+                tasksByEmployee.add(t);
             }
-
-            return tasksByEmployee;
         }
 
-        public List<Task> getTasksByProject(Long projectId) {
+        return tasksByEmployee;
+    }
+
+    public List<Task> getTasksByProject(Long projectId) {
 
         return taskRepository.findByProjectProjectid(projectId);
+    }
+
+
+    public double calculCostProject (Long projectId) {
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(()
+                        -> new NoSuchElementException("Aucun projet trouvé avec l'ID : " + projectId));
+        double totalCost = 0.0;
+
+        // Calculer le coût des consultants
+        List<Consultant> consultants = project.getConsultants();
+        for (Consultant consultant : consultants) {
+            totalCost += consultant.getHourlyRate() * consultant.getHoursWorked();
         }
+        // Calculer le coût des ressources
+        List<Resources> resources = project.getResources();
+        for (Resources resource : resources) {
+            totalCost += resource.getPrice();
+        }
+        // Mettre à jour le coût du projet
+        project.setCost(totalCost);
+        // Sauvegarder les modifications dans la base de données
+        projectRepository.save(project);
 
-     public double calculCostProject (Long projectId) {
-         Project project = projectRepository.findById(projectId)
-                 .orElseThrow(()
-                         -> new NoSuchElementException("Aucun projet trouvé avec l'ID : " + projectId));
-         double totalCost = 0.0;
-
-         // Calculer le coût des consultants
-         List<Consultant> consultants = project.getConsultants();
-         for (Consultant consultant : consultants) {
-             totalCost += consultant.getHourlyRate() * consultant.getHoursWorked();
-         }
-         // Calculer le coût des ressources
-         List<Resources> resources = project.getResources();
-         for (Resources resource : resources) {
-             totalCost += resource.getPrice();
-         }
-         // Mettre à jour le coût du projet
-         project.setCost(totalCost);
-         // Sauvegarder les modifications dans la base de données
-         projectRepository.save(project);
-
-         return totalCost;
-     }
-
+        return totalCost;
+    }
 
     public double calculateAverageProfitability() {
         List<Project> projects = projectRepository.findAll();
@@ -263,7 +246,6 @@ public class ServiceImp implements Iservice {
             return 0; // Ou une valeur par défaut appropriée si aucun projet n'est disponible
         }
     }
-
 
     public ResponseEntity<?> calculateStatisticsByType() {
         List<Project> projects = projectRepository.findAll();
@@ -314,8 +296,190 @@ public class ServiceImp implements Iservice {
         }
     }
 
-    public Consultant addAndAssignConsultantToProjects(Consultant consultant, List<Long> projectIds) {
-        if (consultant == null || projectIds == null || projectIds.isEmpty()) {
+   /* public double calculateProjectProgression(Long projectId) {
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new NoSuchElementException("Projet non trouvé"));
+
+        List<Task> tasks = project.getTasks();
+        int totalTasks = tasks.size();
+        if (totalTasks == 0) {
+            return 0.0;
+        }
+
+        int totalProgress = 0;
+        for (Task task : tasks) {
+            totalProgress += task.getProgression();
+        }
+        return ((double) totalProgress / totalTasks);
+    }*/
+
+
+    public double calculateProjectProgression(Long projectId) {
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new NoSuchElementException("Projet non trouvé"));
+
+        List<Task> tasks = project.getTasks();
+        int totalTasks = tasks.size();
+        if (totalTasks == 0) {
+            return 0.0; // Si aucune tâche n'est présente, la progression est de 0%
+        }
+
+        double totalDurationCompletedTasks = 0.0; // Total des durées des tâches terminées
+        double totalDurationAllTasks = 0.0; // Total des durées de toutes les tâches
+
+        for (Task task : tasks) {
+            long durationInMilliseconds = task.getEndDate().getTime() - task.getStartDate().getTime();
+            double taskDuration = durationInMilliseconds / (1000 * 60 * 60 * 24); // Convertir en jours
+
+            totalDurationAllTasks += taskDuration; // Ajouter la durée de chaque tâche
+
+            if (task.getStatus() == TaskStatus.DONE) {
+                totalDurationCompletedTasks += taskDuration; // Ajouter la durée des tâches terminées
+            }
+        }
+
+        // Calculer la progression du projet
+        double progression = (totalDurationCompletedTasks / totalDurationAllTasks) * 100.0;
+
+        return progression;
+    }
+
+
+
+
+    public List<Object[]> calculateProfitabilityByYear() {
+        List<Project> projects = projectRepository.findAll();
+        Map<Integer, Double> profitabilityByYearMap = new HashMap<>();
+
+        // Parcourir tous les projets pour calculer la rentabilité par année
+        for (Project project : projects) {
+            LocalDate startDate = project.getStartDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            LocalDate endDate = project.getEndDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+            int startYear = startDate.getYear();
+            int endYear = endDate.getYear();
+
+            // Ajouter la rentabilité du projet à la rentabilité totale de chaque année
+            for (int year = startYear; year <= endYear; year++) {
+                double profitability = project.getExpectedRevenue() - project.getCost();
+                profitabilityByYearMap.merge(year, profitability, Double::sum);
+            }
+        }
+
+        // Convertir la map en liste d'objets pour le retour
+        List<Object[]> profitabilityByYearList = new ArrayList<>();
+        for (Map.Entry<Integer, Double> entry : profitabilityByYearMap.entrySet()) {
+            profitabilityByYearList.add(new Object[]{entry.getKey(), entry.getValue()});
+        }
+
+        return profitabilityByYearList;
+    }
+
+
+    public Team addTeam(Team team) {
+        return teamRepository.save(team);
+    }
+
+
+    public void assignEmployeesToTeam(Set<Employee> employees, Long teamId) {
+
+        Team team = teamRepository.findById(teamId)
+                .orElseThrow(() -> new NoSuchElementException("Aucune équipe trouvée avec l'ID : " + teamId));
+
+        if (employees.size() > team.getNbteam()) {
+            log.info("Vous avez dépassé la limite de l'équipe.");
+            return;
+        }
+
+        for (Employee employee : employees) {
+            employee.setTeams(team);
+            employeeRepository.save(employee);
+        }
+        team.setEmployees(new ArrayList<>(employees));
+        team.setNbteam(employees.size());
+        teamRepository.save(team);
+    }
+    /*getproductowner*/
+    public List<User>getproductowners(){
+        return  userRepository.getByRole();
+    }
+    /***/
+    public Team addTeamAndAssignToProject(Team team, Long projectId,Long id) {
+        // Récupérer le projet correspondant à l'ID fourni
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new NoSuchElementException("Aucun projet trouvé avec l'ID : " + projectId));
+        User u = userRepository.findById(id).orElse(null);
+        project.setUser(u);
+        // Vérifier s'il existe déjà une équipe associée à ce projet
+        Team existingTeam = project.getTeam();
+        if (existingTeam != null) {
+            throw new IllegalStateException("Ce projet a déjà une équipe associée.");
+        }
+
+        // Associer l'équipe au projet
+        team.setProject(project);
+
+        // Enregistrer l'équipe
+        Team savedTeam = teamRepository.save(team);
+
+        // Mettre à jour la référence de l'équipe dans le projet
+        project.setTeam(savedTeam);
+        projectRepository.save(project);
+
+        return savedTeam;
+    }
+
+    public List<Team> getAllTeams() {
+        return teamRepository.findAll();
+    }
+
+    public void removeTeam(Long team_id) {
+        Team team = teamRepository.findById(team_id).get();
+
+        // Supprimer les références dans les projets associés
+        Project project = team.getProject();
+
+        project.setTeam(null);
+        projectRepository.save(project);
+
+        // Supprimer les références dans les employés associés
+        for (Employee employee : team.getEmployees()) {
+            employee.setTeams(null);
+            employeeRepository.save(employee);
+        }
+        // Supprimer l'équipe elle-même
+        teamRepository.deleteById(team_id);
+
+    }
+
+
+
+    public Team updateTeam(Long team_id, Team updatedTeam) {
+        Team existingTeam = teamRepository.findById(team_id)
+                .orElseThrow(() -> new NoSuchElementException("Aucun team trouvé avec l'ID : " + team_id));
+
+        // Mettre à jour les champs du projet existant avec les nouvelles valeurs
+        existingTeam.setTeam_name(updatedTeam.getTeam_name());
+        existingTeam.setNbteam(updatedTeam.getNbteam());
+        existingTeam.setAvailability(updatedTeam.isAvailability());
+        existingTeam.setProject(updatedTeam.getProject());
+        return teamRepository.save(existingTeam);
+    }
+
+    public ResponseEntity<Team> getTeamById(Long id) {
+        Optional<Team> teamOptional = teamRepository.findById(id);
+        if (teamOptional.isPresent()) {
+            return new ResponseEntity<>(teamOptional.get(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+
+
+
+    /*public Consultant addAndAssignConsultantToProjects(Consultant consultant, List<Long> projectIds) {
+        if (consultant == null  || projectIds.isEmpty()) {
             throw new IllegalArgumentException("Consultant and at least one project must be provided.");
         }
 
@@ -365,6 +529,16 @@ public class ServiceImp implements Iservice {
         projectRepository.save(project);
     }
 
+    @Override
+    public Consultant addConsultant(Consultant C) {
+        return null;
+    }
+
+    @Override
+    public void deleteConsultant(Long id) {
+
+    }
+
     public void deleteConsultant(Long id) {
         Consultant consultant = consultantRepository.findById(id).orElse(null);
         if (consultant == null) {
@@ -376,9 +550,6 @@ public class ServiceImp implements Iservice {
         // Supprimer le consultant lui-même
         consultantRepository.delete(consultant);
     }
-
-
-
 
     public Consultant updateConsultant(Long id, Consultant updatedConsultant) {
         Consultant existingConsultant = consultantRepository.findById(id)
@@ -422,51 +593,42 @@ public class ServiceImp implements Iservice {
         }
 
     }
-    public double calculateProjectProgression(Long projectId) {
-        Project project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new NoSuchElementException("Projet non trouvé"));
 
-        List<Task> tasks = project.getTasks();
-        int totalTasks = tasks.size();
-        if (totalTasks == 0) {
-            return 0.0;
-        }
 
-        int totalProgress = 0;
-        for (Task task : tasks) {
-            totalProgress += task.getProgression();
-        }
-        return ((double) totalProgress / totalTasks);
-    }
+    public Consultant assignProjectsToConsultant(Long consultantId, List<Long> projectIds) {
+        Consultant consultant = consultantRepository.findById(consultantId)
+                .orElseThrow(() -> new EntityNotFoundException("Consultant not found with id: " + consultantId));
 
-    public List<Object[]> calculateProfitabilityByYear() {
-        List<Project> projects = projectRepository.findAll();
-        Map<Integer, Double> profitabilityByYearMap = new HashMap<>();
+        List<Project> projects = projectRepository.findAllByIdIn(projectIds);
 
-        // Parcourir tous les projets pour calculer la rentabilité par année
+        // Ajoutez le consultant aux projets sélectionnés
         for (Project project : projects) {
-            LocalDate startDate = project.getStartDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-            LocalDate endDate = project.getEndDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-
-            int startYear = startDate.getYear();
-            int endYear = endDate.getYear();
-
-            // Ajouter la rentabilité du projet à la rentabilité totale de chaque année
-            for (int year = startYear; year <= endYear; year++) {
-                double profitability = project.getExpectedRevenue() - project.getCost();
-                profitabilityByYearMap.merge(year, profitability, Double::sum);
-            }
+            project.getConsultants().add(consultant);
         }
 
-        // Convertir la map en liste d'objets pour le retour
-        List<Object[]> profitabilityByYearList = new ArrayList<>();
-        for (Map.Entry<Integer, Double> entry : profitabilityByYearMap.entrySet()) {
-            profitabilityByYearList.add(new Object[]{entry.getKey(), entry.getValue()});
-        }
+        // Mettez à jour les projets dans la base de données
+        projectRepository.saveAll(projects);
 
-        return profitabilityByYearList;
+        return consultant;
     }
 
+*/
+
+
+    public Consultant addConsultantAndAssignToProject(Long projectId, Consultant consultant) {
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new NoSuchElementException("Aucun projet trouvé avec l'ID : " + projectId));
+
+        consultant.setProjectt(project);
+        // Enregistrer la tâche dans la base de données
+        Consultant cons = consultantRepository.save(consultant);
+        // Ajouter la tâche à la liste des tâches du projet
+        project.getConsultants().add(cons);
+
+        projectRepository.save(project);
+        // Retourner la tâche ajoutée
+        return cons;
+    }
 
 }
 
