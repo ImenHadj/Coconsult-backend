@@ -18,7 +18,7 @@ public interface IServiceDepartement {
 
     Set<Employee> retrieveEmployeesByDepartement(Long idDepartment);
     Departement updateDepartment(Long id,Departement departement);
-    public void affecterEmplADep(Set<Employee> ListEmpls,Long idDepartment);
+    public  ResponseEntity<?> affecterEmplADep(Set<Employee> ListEmpls,Long idDepartment);
     public List<Departement> searchUsersByEmailStartingWithLetter(String startingLetter);
 
 }

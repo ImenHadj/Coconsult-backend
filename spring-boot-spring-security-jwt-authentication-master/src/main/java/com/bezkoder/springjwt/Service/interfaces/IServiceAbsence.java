@@ -17,4 +17,6 @@ public interface IServiceAbsence {
     public Absence getAbsence(Long id);
     public ResponseEntity<?> a3tiniEsm(Absence absence);
 
+    public Set<Absence> getAbsencesByUserId(Long id);
+
 }

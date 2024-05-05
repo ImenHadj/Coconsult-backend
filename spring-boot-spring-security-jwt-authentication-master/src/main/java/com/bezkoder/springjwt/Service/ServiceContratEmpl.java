@@ -6,7 +6,6 @@ import com.bezkoder.springjwt.repository.*;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -47,7 +46,6 @@ public class ServiceContratEmpl implements IServiceContratEmpl {
     public ResponseEntity<?> addContratEmployee(ContratEmployee contrat, Long id) {
         Employee emp = employeeRepo.findById(id).get();
         Set<ContratEmployee> anis = emp.getContratEmployees();
-        ContratEmployee OldContrat = null;
         if (anis.size() > 0) {
             if (ContratEmployeeIsValid(contrat, emp)) {
                 for (ContratEmployee se : anis) {
@@ -80,7 +78,6 @@ public class ServiceContratEmpl implements IServiceContratEmpl {
                 nb += 1;
             }
         }
-
         if (contrat.getDate_debut().isAfter(contrat.getDate_fin()) ||
                 nb >= 1 && contrat.getTypeCE().equals(ContratEmployeeType.CIVP)
         ) {
@@ -90,7 +87,7 @@ public class ServiceContratEmpl implements IServiceContratEmpl {
     }
     @Override
     public ResponseEntity<?> updateContratEmployee(ContratEmployee updatedContrat, Long id) {
-        Optional<ContratEmployee> optionalContrat = contratEmplRepo.findById(id);
+        Optional<ContratEmployee> optionalContrat = contratEmplRepo.findById(id); // NullPointerException tetna7a
 
         if (optionalContrat.isPresent()) {
             ContratEmployee existingContrat = optionalContrat.get();
@@ -108,7 +105,6 @@ public class ServiceContratEmpl implements IServiceContratEmpl {
                 existingContrat.setTypeCE(updatedContrat.getTypeCE());
                 existingContrat.setIsArchive(updatedContrat.getIsArchive());
                 existingContrat.setPourcentage(updatedContrat.getPourcentage());
-
                 ContratEmployee updatedContratEmployee = contratEmplRepo.save(existingContrat);
                 return ResponseEntity.ok(updatedContratEmployee.getId_contrat_e());
             } else {

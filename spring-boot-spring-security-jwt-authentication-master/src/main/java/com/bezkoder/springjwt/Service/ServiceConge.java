@@ -40,7 +40,7 @@ public class ServiceConge implements IServiceConge {
         }
 
         SimpleMailMessage message  = new SimpleMailMessage();
-        message.setFrom("gramiaziz9@gamil.com");
+        message.setFrom("gramiaziz9@gmail.com");
         message.setSubject("Your Leave request");
         message.setTo(user.getEmail());
         message.setText("Dear "+user.getUsername()+ "," +
@@ -52,7 +52,6 @@ public class ServiceConge implements IServiceConge {
 
     @Override
     public Set<Conge> getCongesByEmp(Long id) {
-        User user = userRepository.findById(id).get();
         List<Employee> employees = employeeRepo.findAll();
         Employee employee = new Employee();
         for (Employee u : employees){
@@ -60,8 +59,7 @@ public class ServiceConge implements IServiceConge {
                 employee=u;
             }
         }
-        Employee emp = employeeRepo.findById(id).get();
-        return emp.getConges();
+        return employee.getConges();
     }
 
     public boolean isCongeRequestValid(Conge conge, Long employeeId) {
@@ -74,8 +72,6 @@ public class ServiceConge implements IServiceConge {
                 || conge.getDate_debut().after(conge.getDate_fin())) {
             return false;
         }
-
-
         List<Conge> overlappingConges = congeRepo.findCongeInSamePeriodAndSameTeam(
                 employee.getTeams().getTeam_id(),
                 employee.getPosteEmployee(),
@@ -160,12 +156,6 @@ public class ServiceConge implements IServiceConge {
         congeRepo.deleteById(id);
     }
 
-//    public ResponseEntity<?> SearchConge(String search) {
-//        List<Conge> anis= new ArrayList<>();
-//        if(search!=null){
-//            anis=congeRepo.findByCommentaireStartingWith(search);
-//        }
-//        return ResponseEntity.ok( conge.getId_conge());    }
     @Override
     public Conge getConge(Long id) {
 
@@ -181,7 +171,6 @@ public class ServiceConge implements IServiceConge {
     }
 
     public List<Conge> searchCongesByStartingLetters(String StartingLetter) {
-//        return congeRepo.findByCommentaireStartingWithOrJustificationStartingWith(StartingLetter, StartingLetter);
         return congeRepo.findByCommentaireStartingWith(StartingLetter);
 
     }
@@ -202,4 +191,15 @@ public class ServiceConge implements IServiceConge {
         return nombreCongesParType;
     }
 
+    @Override
+    public Long getIdEmplByIdUSer(Long id) {
+        List<Employee> employees = employeeRepo.findAll();
+        Employee employee = new Employee();
+        for (Employee u : employees){
+            if(u.getUserId() ==id){
+                employee=u;
+            }
+        }
+        return employee.getId_employe();
+    }
 }

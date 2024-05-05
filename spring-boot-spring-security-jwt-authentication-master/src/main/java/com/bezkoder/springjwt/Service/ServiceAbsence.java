@@ -38,11 +38,11 @@ public class ServiceAbsence implements IServiceAbsence {
     }
     public ResponseEntity<?> a3tiniEsm(Absence absence){
         Long id = absence.getEmp().getUserId();
-        User user = userRepository.findById(id).orElse(null); // Use findById().orElse(null) to handle the case where the user may not exist
+        User user = userRepository.findById(id).orElse(null);
         if (user != null) {
             return ResponseEntity.ok(user.getUsername());
         } else {
-            return ResponseEntity.notFound().build(); // If the user is not found, return a not found response
+            return ResponseEntity.notFound().build();
         }
     }
 
@@ -52,7 +52,6 @@ public class ServiceAbsence implements IServiceAbsence {
         Absence existingAbsence = absenceRepo.findById(id).get();
 
         existingAbsence.setMotif(updatedAbsence.getMotif());
-//        existingAbsence.setJustification(updatedAbsence.getJustification());
         existingAbsence.setDate(updatedAbsence.getDate());
         existingAbsence.setValidee(updatedAbsence.isValidee());
 
@@ -69,6 +68,20 @@ public class ServiceAbsence implements IServiceAbsence {
         Employee emp = employeeRepo.findById(id).get();
         return emp.getAbsences();
     }
+
+    @Override
+    public Set<Absence> getAbsencesByUserId(Long id) {
+        User user = userRepository.findById(id).get();
+        List<Employee> employees = employeeRepo.findAll();
+        Employee employee = new Employee();
+        for (Employee u : employees){
+            if(u.getUserId() ==id){
+                employee=u;
+            }
+        }
+        return employee.getAbsences();
+    }
+
     @Override
     public Absence getAbsence(Long id) {
         return absenceRepo.findById(id).get();
@@ -76,11 +89,12 @@ public class ServiceAbsence implements IServiceAbsence {
 
 
     public List<Absence> retrieveAbsencesForToday() {
-        LocalDate currentDate = LocalDate.now();  // Current local date
+        LocalDate currentDate = LocalDate.now();
         return absenceRepo.findByDate(currentDate);
     }
     public List<Absence> retrieveAll() {
         return absenceRepo.findAll();
     }
+
 
 }

@@ -5,7 +5,6 @@ import com.bezkoder.springjwt.models.*;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -47,7 +46,6 @@ public class congeController {
         return iServiceConge.SendEmailConge(id,p);
     }
 
-
     @PutMapping("/updateConge/{id}")
     public ResponseEntity<?> updateConge(@PathVariable ("id") Long id,@RequestBody Conge p) throws Exception {
         return iServiceConge.updateConge(id,p);
@@ -64,4 +62,10 @@ public class congeController {
     public List<Conge> retrieveAll(){
         return iServiceConge.retrieveAll();
     }
+
+    @GetMapping("/getIdEmplByIdUSer/{id}")
+    public Long getIdEmplByIdUSer(@PathVariable("id") Long id){
+        return iServiceConge.getIdEmplByIdUSer(id);
+    }
+
 }

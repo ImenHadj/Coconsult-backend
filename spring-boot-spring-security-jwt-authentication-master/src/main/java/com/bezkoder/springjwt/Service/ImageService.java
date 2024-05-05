@@ -45,7 +45,4 @@ public class ImageService {
         imageRepository.deleteById(id);
     }
 
-    public boolean exists(int id){
-        return imageRepository.existsById(id);
-    }
 }

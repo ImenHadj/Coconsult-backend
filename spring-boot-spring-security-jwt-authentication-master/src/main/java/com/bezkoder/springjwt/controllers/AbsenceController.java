@@ -52,9 +52,16 @@ public class AbsenceController {
     public List<Absence> retrieveAll(){
         return iServiceAbsence.retrieveAll();
     }
+    @GetMapping("/getAbsencesByUserId/{id}")
+    public Set<Absence> getAbsencesByUserId(@PathVariable("id") Long id){
+        return iServiceAbsence.getAbsencesByUserId(id);
+    }
 
     @GetMapping("/getAbsence/{id}")
     public Absence getAbsence(@PathVariable("id") Long id){
         return iServiceAbsence.getAbsence(id);
     }
+
+
+
 }
