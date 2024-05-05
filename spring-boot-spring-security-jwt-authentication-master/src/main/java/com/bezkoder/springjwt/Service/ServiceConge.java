@@ -82,8 +82,9 @@ public class ServiceConge implements IServiceConge {
     }
 
     public ResponseEntity<?> saveConge(Conge conge,Long id){
+        Employee employee = employeeRepo.findById(id).get();
         if (isCongeRequestValid(conge,id)) {
-            Employee employee = employeeRepo.findById(id).get();
+
             conge.setEmployee(employee);
             long differenceInMilliseconds = conge.getDate_fin().getTime() - conge.getDate_debut().getTime();
             long differenceInDays = TimeUnit.MILLISECONDS.toDays(differenceInMilliseconds);
@@ -93,10 +94,24 @@ public class ServiceConge implements IServiceConge {
             return ResponseEntity.ok( conge.getId_conge());
         }else{
             Map<String, String> errorResponse = new HashMap<>();
-            errorResponse.put("error", "Invalid conge request. Please check your inputs.");
+            long differenceInMilliseconds = conge.getDate_fin().getTime() - conge.getDate_debut().getTime();
+            long differenceInDays = TimeUnit.MILLISECONDS.toDays(differenceInMilliseconds);
+
+            if (employee.getNbrJourConge() < 0 ) {
+                errorResponse.put("error", "there is any days left.");            }
+            if ( employee.getNbrJourConge()<differenceInDays
+            ) {
+                errorResponse.put("error", "Too much days.");
+            }
+            if ( conge.getDate_debut().after(conge.getDate_fin())) {
+                errorResponse.put("error", "Invalid conge request. Please check your inputs.");
+            }else{
+                errorResponse.put("error", "Check with the administration.");
+            }
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         }
-    }
+        }
+
     public boolean isCongeRequestValidUpdate(Conge conge, Long employeeId, Long congeIdToUpdate) {
         Employee employee = employeeRepo.findById(employeeId).get();
 
@@ -141,7 +156,21 @@ public class ServiceConge implements IServiceConge {
             return ResponseEntity.ok( conge.getId_conge());
         }else{
             Map<String, String> errorResponse = new HashMap<>();
-            errorResponse.put("error", "Invalid conge request. Please check your inputs.");
+            long differenceInMilliseconds = updatedConge.getDate_fin().getTime() - updatedConge.getDate_debut().getTime();
+            long differenceInDays = TimeUnit.MILLISECONDS.toDays(differenceInMilliseconds);
+
+            if (employee.getNbrJourConge() < 0 ) {
+                errorResponse.put("error", "there is any days left.");            }
+            if ( employee.getNbrJourConge()<differenceInDays
+                   ) {
+                errorResponse.put("error", "Too much days.");
+            }
+            if ( updatedConge.getDate_debut().after(updatedConge.getDate_fin())) {
+                errorResponse.put("error", "Invalid conge request. Please check your inputs.");
+            }else{
+                errorResponse.put("error", "Check with the administration.");
+
+            }
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         }
     }
