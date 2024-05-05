@@ -4,26 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9a50f06e-0dfc-4aac-874a-a6f072269a93" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/java/com/bezkoder/springjwt/Vuser/VUser.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/java/com/bezkoder/springjwt/Vuser/VUserController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/java/com/bezkoder/springjwt/Vuser/VUserService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/resources/static/css/index.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/resources/static/css/styles.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/resources/static/index.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/resources/static/js/index.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/resources/static/js/login.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/resources/static/js/register.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/resources/static/js/secrets.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/resources/static/login.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/resources/static/register.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/resources/static/videocall.html" afterDir="false" />
+    <list default="true" id="ae64eeb0-54a8-4116-9166-29b89006b58d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/java/com/bezkoder/springjwt/Config/CorsConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/java/com/bezkoder/springjwt/Config/CorsConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/java/com/bezkoder/springjwt/SpringBootSecurityJwtApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/java/com/bezkoder/springjwt/SpringBootSecurityJwtApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/java/com/bezkoder/springjwt/controllers/RhControlleur.java" beforeDir="false" afterPath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/java/com/bezkoder/springjwt/controllers/RhControlleur.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/java/com/bezkoder/springjwt/security/WebSecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/java/com/bezkoder/springjwt/security/WebSecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/target/classes/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/target/classes/com/bezkoder/springjwt/SpringBootSecurityJwtApplication.class" beforeDir="false" afterPath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/target/classes/com/bezkoder/springjwt/SpringBootSecurityJwtApplication.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/target/classes/com/bezkoder/springjwt/controllers/AuthController.class" beforeDir="false" afterPath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/target/classes/com/bezkoder/springjwt/controllers/AuthController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/target/classes/com/bezkoder/springjwt/controllers/DetaisRecrutementControlleur.class" beforeDir="false" afterPath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/target/classes/com/bezkoder/springjwt/controllers/DetaisRecrutementControlleur.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/target/classes/com/bezkoder/springjwt/controllers/RhControlleur.class" beforeDir="false" afterPath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/target/classes/com/bezkoder/springjwt/controllers/RhControlleur.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/target/classes/com/bezkoder/springjwt/controllers/TestController.class" beforeDir="false" afterPath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/target/classes/com/bezkoder/springjwt/controllers/TestController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/target/classes/com/bezkoder/springjwt/controllers/UserController.class" beforeDir="false" afterPath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/target/classes/com/bezkoder/springjwt/controllers/UserController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/target/classes/com/bezkoder/springjwt/security/WebSecurityConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/target/classes/com/bezkoder/springjwt/security/WebSecurityConfig.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,31 +28,59 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="useMavenConfig" value="true" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
   <component name="ProjectId" id="2fQOL5LGGwBiOQpsdf8j8Tz6NQH" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
     <option name="showVisibilityIcons" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/ktari/Coconsult-backend/spring-boot-spring-security-jwt-authentication-master&quot;,
-    &quot;spring.configuration.checksum&quot;: &quot;a571343804e23d1b8baf1f73aca9840c&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "C:/Users/ktari/BFinal",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "spring.configuration.checksum": "a571343804e23d1b8baf1f73aca9840c"
   }
-}</component>
+}]]></component>
+  <component name="RunManager">
+    <configuration name="SpringBootSecurityJwtApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="spring-boot-security-jwt" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.bezkoder.springjwt.SpringBootSecurityJwtApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="9a50f06e-0dfc-4aac-874a-a6f072269a93" name="Changes" comment="" />
+      <changelist id="ae64eeb0-54a8-4116-9166-29b89006b58d" name="Changes" comment="" />
       <created>1713729775323</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1713729775323</updated>
       <workItem from="1713729776638" duration="316000" />
       <workItem from="1713743359372" duration="5000" />
+      <workItem from="1714950533729" duration="459000" />
     </task>
     <servers />
   </component>
