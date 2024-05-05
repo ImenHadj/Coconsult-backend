@@ -4,18 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ae64eeb0-54a8-4116-9166-29b89006b58d" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/java/com/bezkoder/springjwt/Service/CommandeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/java/com/bezkoder/springjwt/Service/CommandeService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/java/com/bezkoder/springjwt/Service/ICommandeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/java/com/bezkoder/springjwt/Service/ICommandeService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/java/com/bezkoder/springjwt/controllers/CommandeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/java/com/bezkoder/springjwt/controllers/CommandeController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/java/com/bezkoder/springjwt/repository/FournisseurRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/java/com/bezkoder/springjwt/repository/FournisseurRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/java/com/bezkoder/springjwt/repository/ResoucesRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/java/com/bezkoder/springjwt/repository/ResoucesRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/java/com/bezkoder/springjwt/security/WebSecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/java/com/bezkoder/springjwt/security/WebSecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/target/classes/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/target/classes/com/bezkoder/springjwt/security/WebSecurityConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/spring-boot-spring-security-jwt-authentication-master/target/classes/com/bezkoder/springjwt/security/WebSecurityConfig.class" afterDir="false" />
-    </list>
+    <list default="true" id="ae64eeb0-54a8-4116-9166-29b89006b58d" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -39,27 +28,28 @@
     <option name="showLibraryContents" value="true" />
     <option name="showVisibilityIcons" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
-    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
-    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
-    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;Resources&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/LENOVO GAMING/OneDrive/Desktop/Coconsult-backend&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;spring.configuration.checksum&quot;: &quot;a571343804e23d1b8baf1f73aca9840c&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "Resources",
+    "last_opened_file_path": "C:/Users/LENOVO GAMING/OneDrive/Desktop/Coconsult-backend",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "spring.configuration.checksum": "a571343804e23d1b8baf1f73aca9840c",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration name="SpringBootSecurityJwtApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
       <module name="spring-boot-security-jwt" />
@@ -85,7 +75,7 @@
       <workItem from="1714418542528" duration="356000" />
       <workItem from="1714468490310" duration="1668000" />
       <workItem from="1714866946052" duration="1479000" />
-      <workItem from="1714938818892" duration="4462000" />
+      <workItem from="1714938818892" duration="4630000" />
     </task>
     <servers />
   </component>
