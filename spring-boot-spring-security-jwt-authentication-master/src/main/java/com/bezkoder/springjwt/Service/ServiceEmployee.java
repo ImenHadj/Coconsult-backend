@@ -24,6 +24,8 @@ public class ServiceEmployee implements IServiceEmployee {
     ContratEmplRepo contratEmplRepo;
     NoteRepo noteRepo;
     AbsenceRepo absenceRepo;
+    TeamRepository teamRepository;
+
     @Override
     public void addEmployeeEtAffectDepartement(Employee employee,Long id) {
         Departement departement = departementRepo.findById(id).get();
@@ -42,30 +44,47 @@ public class ServiceEmployee implements IServiceEmployee {
     }
 
     @Override
-    public ResponseEntity<Long> updateEmployee(Long id, Employee updatedEmployee,Long p) {
-        Employee emp = employeeRepo.findById(id).get();
-        Departement depart = departementRepo.findById(p).get();
-
+    public ResponseEntity<Long> updateEmployee(Long id, Employee updatedEmployee, Long departementId, Long teamId) {
+        // Récupérer l'employé à partir de l'ID
+        Employee emp = employeeRepo.findById(id).orElse(null);
         if (emp == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(id);
         }
 
+        // Récupérer le département à partir de l'ID
+        Departement depart = departementRepo.findById(departementId).orElse(null);
+        if (depart == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(departementId);
+        }
+
+        // Vérifier la saturation du département
         int max = depart.getMaxSaturation();
         int saturation = depart.getNbreEmpl();
-
         if (max <= saturation) {
-            log.error("Validation failed for Employee update. ID: {} - Departement is saturated.", id);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(id + 100);
-        } else {
-            emp.setDepartement(depart);
-            depart.setNbreEmpl(saturation + 1);
-            emp.setPosteEmployee(updatedEmployee.getPosteEmployee());
-            emp.setDate_embauche(updatedEmployee.getDate_embauche());
-            employeeRepo.save(emp);
-            departementRepo.save(depart);
-
-            return ResponseEntity.ok(id);
+            log.error("Validation failed for Employee update. ID: {} - Department is saturated.", id);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(id);
         }
+
+        // Récupérer l'équipe à partir de l'ID
+        Team team = teamRepository.findById(teamId).orElse(null);
+        if (team == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(teamId);
+        }
+
+        // Mettre à jour les attributs de l'employé
+        emp.setDepartement(depart);
+        emp.setPosteEmployee(updatedEmployee.getPosteEmployee());
+        emp.setDate_embauche(updatedEmployee.getDate_embauche());
+        emp.setTeams(team); // Affecter l'équipe à l'employé
+
+        // Mettre à jour le nombre d'employés dans le département
+        depart.setNbreEmpl(saturation + 1);
+
+        // Sauvegarder les modifications
+        employeeRepo.save(emp);
+        departementRepo.save(depart);
+
+        return ResponseEntity.ok(id);
     }
 
 
@@ -174,5 +193,36 @@ public class ServiceEmployee implements IServiceEmployee {
     public List<Employee> findByPosteEmployeeStartingWith(String StartingLetter) {
         return employeeRepo.findByDepartementLibelleStartingWith(StartingLetter);
     }
+
+
+    public void assignTeamToEmployee(Long employeeId, Long teamId) {
+        Employee employee = employeeRepo.findById(employeeId)
+                .orElseThrow(() -> new RuntimeException("Employé non trouvé avec l'ID: " + employeeId));
+        Team team = teamRepository.findById(teamId)
+                .orElseThrow(() -> new RuntimeException("Équipe non trouvée avec l'ID: " + teamId));
+
+        // Check if team has reached its maximum capacity
+        int maxCapacity = (int) team.getNbteam();
+        int currentCapacity = team.getEmployees().size();
+        if (currentCapacity >= maxCapacity) {
+            throw new RuntimeException("L'équipe a atteint sa capacité maximale.");
+        }
+
+        // Remove the employee from their current team, if any
+        if (employee.getTeams() != null) {
+            employee.getTeams().getEmployees().remove(employee);
+        }
+
+        // Assign the employee to the new team
+        employee.setTeams(team);
+        team.getEmployees().add(employee);
+
+        employeeRepo.save(employee);
+        teamRepository.save(team);
+    }
+
+
+
+
 
     }

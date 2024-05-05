@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface ConsultantRepository extends JpaRepository<Consultant,Long> {
-    List<Consultant> findByProjectsProjectid(Long projectId);
+
 }

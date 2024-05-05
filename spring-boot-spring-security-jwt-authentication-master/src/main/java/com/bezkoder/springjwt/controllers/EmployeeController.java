@@ -42,9 +42,9 @@ public class EmployeeController {
         iServiceEmployee.assignEmToDep(e,d);
     }
 
-    @PutMapping("/updateEmployee/{e}/{pp}")
-    public ResponseEntity<Long> updateEmployee(@PathVariable("e") Long e, @RequestBody Employee p,@PathVariable("pp") Long pp) {
-        return iServiceEmployee.updateEmployee(e,p,pp);
+    @PutMapping("/updateEmployee/{e}/{pp}/{T}")
+    public ResponseEntity<Long> updateEmployee(@PathVariable("e") Long e, @RequestBody Employee p,@PathVariable("pp") Long pp,@PathVariable("T") Long T) {
+        return iServiceEmployee.updateEmployee(e,p,pp,T);
     }
 
     @DeleteMapping("/DeleteEmployee/{p}")
@@ -52,7 +52,7 @@ public class EmployeeController {
         iServiceEmployee.deleteEmployee(p);
     }
 
-    @GetMapping("/retrieveAll")
+    @GetMapping("/retrievceAll")
     public List<Employee> retrieveAll(){
         return iServiceEmployee.retrieveAll();
     }
@@ -70,6 +70,12 @@ public class EmployeeController {
     public List<Employee> findAllByPosteEmployee(@PathVariable("posteEmployee") PosteEmployee posteEmployee){
         return iServiceEmployee.findAllByPosteEmployee(posteEmployee);
     }
+
+    @PutMapping("/{employeeId}/assign-team/{teamId}")
+    public void assignTeamToEmployee(@PathVariable Long employeeId, @PathVariable Long teamId) {
+        iServiceEmployee.assignTeamToEmployee(employeeId, teamId);
+    }
+
 
 
 }

@@ -1,11 +1,10 @@
 package com.bezkoder.springjwt.Service;
 
-import com.bezkoder.springjwt.models.Consultant;
-import com.bezkoder.springjwt.models.Project;
-import com.bezkoder.springjwt.models.Task;
+import com.bezkoder.springjwt.models.*;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
+import java.util.Set;
 
 public interface Iservice {
     Project addProject(Project p);
@@ -28,13 +27,24 @@ public interface Iservice {
     ResponseEntity<?> calculateStatisticsByType();
     List<Object[]> calculateProfitabilityForEachProject();
     ResponseEntity<?> getBestProjectOfTheYear();
-    Consultant addAndAssignConsultantToProjects(Consultant consultant, List<Long> projectIds);
-    void assignConsultantsToProject(Long projectId, List<Long> consultantIds);
-    Consultant addConsultant(Consultant C);
-    void deleteConsultant(Long id);
-    Consultant updateConsultant(Long id, Consultant updatedConsultant);
-    List<Consultant> getAllConsultants();
-    List<Consultant> getConsultantsByProject(Long projectId);
-    ResponseEntity<Consultant> getConsultantById(Long id);
+   // Consultant addAndAssignConsultantToProjects(Consultant consultant, List<Long> projectIds);
+   // void assignConsultantsToProject(Long projectId, List<Long> consultantIds);
+   // Consultant addConsultant(Consultant C);
+   // void deleteConsultant(Long id);
+   // Consultant updateConsultant(Long id, Consultant updatedConsultant);
+   // List<Consultant> getAllConsultants();
+   // List<Consultant> getConsultantsByProject(Long projectId);
+   // ResponseEntity<Consultant> getConsultantById(Long id);
+
     List<Object[]> calculateProfitabilityByYear();
+    Team addTeam(Team team);
+    void assignEmployeesToTeam(Set<Employee> employees, Long teamId);
+    Team addTeamAndAssignToProject(Team team, Long projectId);
+    double calculateProjectProgression(Long projectId);
+    List<Team> getAllTeams();
+    Team updateTeam(Long team_id, Team updatedTeam);
+    void removeTeam(Long team_id);
+    ResponseEntity<Team> getTeamById(Long id);
+   // Consultant assignProjectsToConsultant(Long consultantId, List<Long> projectIds);
+   Consultant addConsultantAndAssignToProject(Long projectId, Consultant consultant);
 }

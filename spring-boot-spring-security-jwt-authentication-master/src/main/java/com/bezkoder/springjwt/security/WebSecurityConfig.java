@@ -94,6 +94,7 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeRequests(auth ->
           auth.requestMatchers("/api/auth/**").permitAll()
+                  .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**").permitAll()
               .requestMatchers("/api/test/**").permitAll()
                   .requestMatchers("/api/users/**").permitAll()
                   .requestMatchers("/api/test/user" ).permitAll()
@@ -107,7 +108,7 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
                   .requestMatchers("/coconsult/**").permitAll()
                   .requestMatchers("/recrutement/**").permitAll()
                   .requestMatchers("/DetailsRect/**").permitAll()
-
+                  .requestMatchers("/Clients/**").permitAll()
                             .requestMatchers("/", "/static/**").permitAll()
 
                     .requestMatchers("/","/favicon.ico").permitAll()

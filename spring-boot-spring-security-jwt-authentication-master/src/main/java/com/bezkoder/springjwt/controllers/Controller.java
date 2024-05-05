@@ -1,9 +1,7 @@
 package com.bezkoder.springjwt.controllers;
 
 import com.bezkoder.springjwt.Service.Iservice;
-import com.bezkoder.springjwt.models.Consultant;
-import com.bezkoder.springjwt.models.Project;
-import com.bezkoder.springjwt.models.Task;
+import com.bezkoder.springjwt.models.*;
 
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -11,10 +9,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Set;
 
 @RestController
 @AllArgsConstructor
-@CrossOrigin(origins ="http://localhost:4200")
+
 
 @RequestMapping("/coconsult")
 public class Controller {
@@ -136,7 +136,7 @@ public class Controller {
     }
 
 
-
+/*
     @PostMapping("/addConsultantassign")
     public ResponseEntity<Consultant> addAndAssignConsultantToProjects(
             @RequestBody Consultant consultant,
@@ -188,9 +188,71 @@ public class Controller {
     public ResponseEntity<Consultant> getConsultantById(@PathVariable Long id) {
         return iservice.getConsultantById(id);
     }
-
+*/
     @GetMapping("/profitability-by-year")
     public List<Object[]> getProfitabilityByYear() {
         return iservice.calculateProfitabilityByYear();
     }
+
+
+    @PostMapping("/addTeam")
+    @ResponseBody
+    public Team addTeam(@RequestBody Team team) {
+        Team T = iservice.addTeam(team);
+        return T;
+    }
+
+    @PutMapping("/assign-employees/{teamId}")
+    public void assignEmployeesToTeam(@RequestBody Set<Employee> employees,@PathVariable("teamId") Long teamId) {
+        iservice.assignEmployeesToTeam(employees,teamId);
+    }
+
+    @PostMapping("/addteamaff/{projectId}")
+    public Team addTeamAndAssignToProject(@PathVariable Long projectId, @RequestBody Team team) {
+        Team addedTeam = iservice.addTeamAndAssignToProject(team,projectId);
+        return addedTeam;
+    }
+
+
+    @GetMapping("/progression/{projectId}")
+    public ResponseEntity<Double> calculateProjectProgression(@PathVariable Long projectId) {
+        try {
+            double progression = iservice.calculateProjectProgression(projectId);
+            return ResponseEntity.ok(progression);
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/getAllTeams")
+    @ResponseBody
+    public List<Team> getAllTeams() {
+        List<Team> teamList = iservice.getAllTeams();
+        return teamList;
+    }
+
+    @PutMapping("/updateteam/{team_id}")
+    @ResponseBody
+    public Team updateTeam(@PathVariable("team_id") Long team_id, @RequestBody Team t) {
+        Team team = iservice.updateTeam(team_id, t);
+        return team;
+    }
+
+    @DeleteMapping("/removeteam/{team_id}")
+    @ResponseBody
+    public void removeTeam(@PathVariable("team_id") Long team_id) {
+        iservice.removeTeam(team_id);
+    }
+    @GetMapping("/team/{id}")
+    public ResponseEntity<Team> getTeamById(@PathVariable Long id) {
+        return iservice.getTeamById(id);
+    }
+
+    @PostMapping("/addconsultant/{projectId}")
+    public Consultant addConsultantAndAssignToProject(@PathVariable Long projectId, @RequestBody Consultant consultant) {
+        Consultant cons = iservice.addConsultantAndAssignToProject(projectId, consultant);
+        return cons;
+    }
+
+
 }

@@ -24,7 +24,7 @@ public class Team {
     private boolean availability;
     private double nbteam ;
 
-    @JsonIgnore
+     @JsonIgnore
     @OneToOne(mappedBy = "team")
     private Project project;
 
