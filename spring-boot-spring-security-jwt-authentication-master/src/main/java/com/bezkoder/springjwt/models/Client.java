@@ -32,15 +32,22 @@ public class Client implements Serializable {
 
     @OneToMany(mappedBy= "client", fetch = FetchType.EAGER)
     private List<Facture> factures;
+
     @JsonIgnore
     @OneToMany(mappedBy= "client", fetch = FetchType.EAGER)
     private List<Paiment> paiments;
 
-
     @OneToMany(mappedBy= "client", fetch = FetchType.EAGER)
     private List<Contract> contracts;
 
+
+    @JsonIgnore
     @OneToMany(mappedBy= "client", fetch = FetchType.EAGER)
     private List<Project> projects;
+
+@JsonIgnore
+@ManyToOne
+Productowner productowner;
+
 
 }

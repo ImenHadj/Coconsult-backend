@@ -1,6 +1,7 @@
 package com.bezkoder.springjwt.models;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import jakarta.persistence.*;
@@ -51,6 +52,9 @@ public class User {
     this.status = status;
   }
 
+
+  @OneToMany(mappedBy= "user", fetch = FetchType.EAGER)
+  private List<Project> projects;
 
   @ManyToMany(fetch = FetchType.LAZY)
   @JoinTable(  name = "user_roles",

@@ -41,13 +41,20 @@ public class Project {
     @OneToMany(mappedBy ="project",  cascade = CascadeType.ALL)
     private List<Task> tasks;
     @JsonIgnore
-    @ManyToMany
+    @OneToMany(mappedBy ="projectt",  cascade = CascadeType.ALL)
     List<Consultant>  consultants;
     @JsonIgnore
     @ManyToMany
     List<Resources> resources;
 
-    @JsonIgnore
+
+
     @ManyToOne
     Client client;
+
+    @ManyToOne
+    Productowner productowner;
+
+    @ManyToOne
+    User user;
 }

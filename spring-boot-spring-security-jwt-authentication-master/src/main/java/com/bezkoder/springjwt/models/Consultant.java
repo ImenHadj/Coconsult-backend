@@ -26,6 +26,6 @@ public class Consultant {
     private double hoursWorked ;
 
     @JsonIgnore
-    @ManyToMany(mappedBy = "consultants")
-   List<Project> projects;
+    @ManyToOne
+    Project projectt;
 }

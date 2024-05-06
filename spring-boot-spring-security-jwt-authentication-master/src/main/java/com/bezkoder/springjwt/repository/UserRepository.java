@@ -26,4 +26,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
   long countByRolesName(ERole role);
 
+
+  @Query("SELECT DISTINCT u FROM User u JOIN u.roles r WHERE r.name = 'ROLE_PRODUCT_OWNER'")
+  List<User> getByRole();
+
+
 }

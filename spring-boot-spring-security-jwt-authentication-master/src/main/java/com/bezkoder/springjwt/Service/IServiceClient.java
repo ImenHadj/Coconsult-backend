@@ -1,6 +1,7 @@
 package com.bezkoder.springjwt.Service;
 
 import com.bezkoder.springjwt.models.*;
+import com.bezkoder.springjwt.notifdto.MonthlyPaymentDTO;
 import com.bezkoder.springjwt.notifdto.depassagefacture;
 import com.bezkoder.springjwt.notifdto.paymentpercentage;
 import com.bezkoder.springjwt.notifdto.rempcalendrier;
@@ -71,9 +72,19 @@ public interface IServiceClient {
 
     List<paymentpercentage> percentage();
 
+
+    List<MonthlyPaymentDTO> getTotalPaymentsByMonth();
+
+
     List<Client> getallclientsbyproductowner();
 
     List<Project> getprojbyclient(Long id);
+
+
+    List<Project> getProjectofPO(Long id);
+
+    Long addhistory(MeetHistory history);
+
 
     //send reminder
 

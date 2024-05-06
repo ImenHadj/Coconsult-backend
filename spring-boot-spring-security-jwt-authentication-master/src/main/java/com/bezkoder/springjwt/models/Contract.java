@@ -31,7 +31,7 @@ public class Contract implements Serializable {
     private LocalDateTime startDate;
     @DateTimeFormat(pattern = "dd/MM/yyyy hh:mm a")
     private LocalDateTime endDate;
-    private int version; //track contract changes
+    private int version;
     private String item_description;
     private BigDecimal payment_terms;
     private String contract_status;

@@ -36,7 +36,6 @@ import com.bezkoder.springjwt.security.services.UserDetailsImpl;
 
 //@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/api/auth")
 public class AuthController {
   private static final int MAX_LOGIN_ATTEMPTS = 5;

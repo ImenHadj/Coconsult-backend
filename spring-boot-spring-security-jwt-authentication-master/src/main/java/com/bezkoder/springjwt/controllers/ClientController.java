@@ -2,6 +2,7 @@ package com.bezkoder.springjwt.controllers;
 
 import com.bezkoder.springjwt.Service.IServiceClient;
 import com.bezkoder.springjwt.models.*;
+import com.bezkoder.springjwt.notifdto.MonthlyPaymentDTO;
 import com.bezkoder.springjwt.notifdto.depassagefacture;
 import com.bezkoder.springjwt.notifdto.paymentpercentage;
 import com.bezkoder.springjwt.notifdto.rempcalendrier;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/*@CrossOrigin(origins = "*")*/
+
 @RestController
 @RequestMapping("/Clients")
 public class ClientController {
@@ -57,13 +58,13 @@ public class ClientController {
     }
     @DeleteMapping("/{id}")
     public void removeClient(@PathVariable Long id) {
-            iServiceClient.removeClient(id);
+        iServiceClient.removeClient(id);
     }
 
     /*contrat*/
     @PostMapping("/addcontrat/{clientId}")
     public Long addContract(@RequestBody Contract contract, @PathVariable Long clientId) {
-         iServiceClient.ajouterContrat(contract, clientId);
+        iServiceClient.ajouterContrat(contract, clientId);
         return contract.getIdContract();
     }
     @DeleteMapping("/contrat/{id}")
@@ -86,12 +87,12 @@ public class ClientController {
     public Contract updateContrat(@PathVariable Long id, @RequestBody Contract updatedContrat) {
         return iServiceClient.modifierContrat(id, updatedContrat);
     }
-/*factures*/
-@PostMapping("/addfacture/{clientId}/{idcontrat}")
-public Long addfacture(@RequestBody Facture f, @PathVariable Long clientId,@PathVariable Long idcontrat) {
-    iServiceClient.ajouterFacture(f,clientId,idcontrat);
-    return f.getIdFacture();
-}
+    /*factures*/
+    @PostMapping("/addfacture/{clientId}/{idcontrat}")
+    public Long addfacture(@RequestBody Facture f, @PathVariable Long clientId,@PathVariable Long idcontrat) {
+        iServiceClient.ajouterFacture(f,clientId,idcontrat);
+        return f.getIdFacture();
+    }
     @DeleteMapping("/facture/{id}")
     public void removefacture(@PathVariable Long id) {
         iServiceClient.removefacture(id);
@@ -128,13 +129,19 @@ public Long addfacture(@RequestBody Facture f, @PathVariable Long clientId,@Path
 
     @PostMapping("/pickremiender/{id}")
     public ResponseEntity<String>  contratselectemail(@PathVariable Long id){
-      iServiceClient.sendContractReminders(id);
+        iServiceClient.sendContractReminders(id);
         return ResponseEntity.status(HttpStatus.OK).body("Contract reminders sent successfully.");
     }
     @GetMapping("/percentage")
-        public List<paymentpercentage> percentage(){
-          return  iServiceClient.percentage();
+    public List<paymentpercentage> percentage(){
+        return  iServiceClient.percentage();
     }
+    @GetMapping("/paimentbymonth")
+    public List<MonthlyPaymentDTO> paimentbymonth(){
+        return  iServiceClient.getTotalPaymentsByMonth();
+    }
+
+
     @GetMapping("/clientsbyprod")
     public List<Client> clientsbyprod(){
         return iServiceClient.getallclientsbyproductowner();
@@ -144,4 +151,14 @@ public Long addfacture(@RequestBody Facture f, @PathVariable Long clientId,@Path
         return iServiceClient.getprojbyclient(id);
     }
 
+    @PostMapping("/addhistory")
+    @ResponseBody
+    public Long addhistory(@RequestBody MeetHistory history){
+        return iServiceClient.addhistory(history);
+    }
+    @GetMapping("/getprojectforPO/{id}")
+    @ResponseBody
+    public List<Project>getallproj(@PathVariable Long id){
+        return iServiceClient.getProjectofPO(id);
+    }
 }
