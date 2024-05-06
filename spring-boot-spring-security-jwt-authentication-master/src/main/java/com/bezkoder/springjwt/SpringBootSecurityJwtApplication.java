@@ -29,8 +29,8 @@ public class SpringBootSecurityJwtApplication {
 	) {
 		return args -> {
 			service.register(VUser.builder()
-					.username("Ali")
-					.email("ali@mail.com")
+					.username("chaima")
+					.email("chaima@mail.com")
 					.password("aaa")
 					.build());
 

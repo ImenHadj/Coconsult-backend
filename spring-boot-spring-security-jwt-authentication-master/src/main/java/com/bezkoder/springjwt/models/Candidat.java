@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -29,6 +30,7 @@ public class Candidat  implements Serializable {
     private String lettreMotivationUrl;
     private String portfolioUrl;
     private Integer score;
+    private LocalDate Datepostule;
     @Enumerated(EnumType.STRING)
     private  niveauDetude niveauDetude;
     @Enumerated(EnumType.STRING)

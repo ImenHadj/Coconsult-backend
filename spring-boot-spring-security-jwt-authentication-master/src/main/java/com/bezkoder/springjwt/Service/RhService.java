@@ -4,9 +4,13 @@ import com.bezkoder.springjwt.models.*;
 import com.bezkoder.springjwt.repository.CandidatRepo;
 import com.bezkoder.springjwt.repository.DetailsRecRepo;
 import com.bezkoder.springjwt.repository.RecrutementRepo;
+import com.twilio.Twilio;
+import com.twilio.rest.api.v2010.account.Message;
+import com.twilio.type.PhoneNumber;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -189,12 +193,45 @@ public class RhService  implements  IRhService {
     }
 
 
+
     public DetailRecrutement proposerDateEntretien(Long idCandidat, DetailRecrutement detailRecrt) {
         Candidat candidat = candidatRepo.findById(idCandidat).get();
         candidat.setDetailRecrutement(detailRecrt);
         detailRecrt.setCandidat(candidat);
-        return detailsRecRepo.save(detailRecrt);
-    }
+        // Enregistrer le détail de recrutement
+        detailRecrt = detailsRecRepo.save(detailRecrt);
+        candidatRepo.save(candidat);
+        // Récupérer le numéro de téléphone, la date d'entretien, nom et prénom
+        String numeroCandidat = candidat.getTelephone();
+        LocalDate dateEntretien = detailRecrt.getDateEntretien();
+        String nomCandidat = candidat.getNom();
+        String prenomCandidat = candidat.getPrenom();
+        // Initialiser Twilio
+        String accountSid = "AC3f533a6deb2b1e1a731cb8304b5f613d";
+        String authToken = "429783ec8e700d7e898e16129f3d19b1";
+        Twilio.init(accountSid, authToken);
+        // Numéro Twilio pour envoyer le SMS
+        String fromNumber = "+13344014268";
+        // Créer un message avec la date d'entretien, nom et prénom du candidat
+        String body = "Bonjour " + prenomCandidat + " " + nomCandidat +
+                "Votre entretien est prévu pour le " + dateEntretien + ".";
+        // Envoyer le SMS
+        Message message = Message.creator(
+                new PhoneNumber(numeroCandidat),
+                new PhoneNumber(fromNumber),
+                body
+        ).create();
+        System.out.println("Message envoyé : " + message.getSid());
+        // Retourner le détail de recrutement mis à jour
+        return detailRecrt; }
+
+    public void sendSms(String to, String from, String body) {
+        Message message = Message.creator(
+                new PhoneNumber(to),
+                new PhoneNumber(from),
+                body
+        ).create();}
+
 
 
     public List<LocalDate> getAllRendezVousDates() {
@@ -262,7 +299,16 @@ public class RhService  implements  IRhService {
         return candidatsAcceptesParPosteParExperiencePro;
     }
 
+    @Scheduled(fixedRate = 360000)
+    public void checkCandidatsEnAttente() {
+        LocalDate currentDate = LocalDate.now();
+        LocalDate dateLimite = currentDate.minusDays(2);
+        List<Candidat> candidats = candidatRepo.findAllSelectionnesPlusDeDeuxJours(dateLimite);
+        for (Candidat candidat : candidats) {
+            System.out.println("Candidat " + candidat.getNom() + " est en attente depuis plus de 2 jours.");
 
+        }
+    }
 
 
 

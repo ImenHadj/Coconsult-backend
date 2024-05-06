@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -19,7 +20,7 @@ import java.util.Map;
 @Slf4j
 @AllArgsConstructor
 
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/recrutement")
 
 public class RhControlleur {
@@ -127,13 +128,17 @@ public class RhControlleur {
     }
 
 
-
     @PostMapping("/upload")
     public ResponseEntity<String> upload(@RequestParam("file1") MultipartFile file1,
                                          @RequestParam(value = "file2", required = false) MultipartFile file2,
                                          @RequestParam("idRecrutement") Long idRecrutement,
                                          @ModelAttribute Candidat candidat) throws IOException {
         Recrutement recrutement = rhService.getRecrutementById(idRecrutement);
+        // Vérifier si dateCloture est antérieure à la date actuelle
+        LocalDate dateCloture = recrutement.getDateCloture();
+        if (dateCloture != null && dateCloture.isBefore(LocalDate.now())) {
+            return new ResponseEntity<>("Désolé, la date de clôture est dépassée. Vous ne pouvez pas postuler.", HttpStatus.BAD_REQUEST);
+        }
         if (recrutement == null) {
             return new ResponseEntity<>("Recrutement non trouvé pour l'ID spécifié.", HttpStatus.NOT_FOUND);
         } candidat.setRecrutementC(recrutement);
@@ -157,23 +162,29 @@ public class RhControlleur {
         candidat.setScore(score);
         if (score == 90) {
             candidat.setStatutCandidat(StatutCandidat.SELECTIONNE);
+            recrutement.setPostesVacants(recrutement.getPostesVacants() - 1);
         }
+
+        if (recrutement.getPostesVacants() <= 0) {
+            return new ResponseEntity<>("Aucun poste disponible.", HttpStatus.BAD_REQUEST);
+        }
+        recrutement.setNbrdepostulants(recrutement.getNbrdepostulants() + 1);
         // Téléverser les fichiers
         Map result1 = cloudService.upload(file1);
         String fileUrl1 = (String) result1.get("url");
         candidat.setCvUrl(fileUrl1);
-
         String fileUrl2 = null;
         if (file2 != null) {
             Map result2 = cloudService.upload(file2);
             fileUrl2 = (String) result2.get("url");
-            candidat.setLettreMotivationUrl(fileUrl2);
-        }
+            candidat.setLettreMotivationUrl(fileUrl2);  }
         // Enregistrer le candidat avec l'ID du recrutement
         rhService.addCand(candidat);
-
         return new ResponseEntity<>("Fichiers téléversés avec succès ! ", HttpStatus.OK);
+
+
     }
+
 
     @GetMapping("/nombreCandParPoste")
     public ResponseEntity<Map<String, Integer>> getNombreCandidatsParPoste() {
