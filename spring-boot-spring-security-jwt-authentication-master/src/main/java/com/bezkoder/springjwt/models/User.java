@@ -1,6 +1,7 @@
 package com.bezkoder.springjwt.models;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import jakarta.persistence.*;
@@ -38,7 +39,8 @@ public class User {
   @Column(length = 20)
   private AccountStatus status;
 
-
+  @OneToMany(mappedBy= "user", fetch = FetchType.EAGER)
+  private List<Project> projects;
 
 
 

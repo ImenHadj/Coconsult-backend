@@ -39,7 +39,7 @@ public interface Iservice {
     List<Object[]> calculateProfitabilityByYear();
     Team addTeam(Team team);
     void assignEmployeesToTeam(Set<Employee> employees, Long teamId);
-    Team addTeamAndAssignToProject(Team team, Long projectId);
+    Team addTeamAndAssignToProject(Team team, Long projectId,Long id);
     double calculateProjectProgression(Long projectId);
     List<Team> getAllTeams();
     Team updateTeam(Long team_id, Team updatedTeam);
@@ -47,4 +47,6 @@ public interface Iservice {
     ResponseEntity<Team> getTeamById(Long id);
    // Consultant assignProjectsToConsultant(Long consultantId, List<Long> projectIds);
    Consultant addConsultantAndAssignToProject(Long projectId, Consultant consultant);
+    List<User>getproductowners();
+    List<Employee> getEmployeesByTeam(Long teamId);
 }

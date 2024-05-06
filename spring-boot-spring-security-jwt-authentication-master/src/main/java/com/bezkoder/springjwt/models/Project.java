@@ -3,10 +3,8 @@ package com.bezkoder.springjwt.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import java.util.Date;
 import java.util.List;
@@ -16,7 +14,8 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
-
+@Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,7 +35,6 @@ public class Project {
     private Priority priority;
 
     @OneToOne(cascade = CascadeType.ALL)
-    //@JsonIgnore
     private Team team;
 
 
@@ -49,4 +47,6 @@ public class Project {
     @JsonIgnore
     @ManyToMany
     List<Resources> resources;
+    @ManyToOne
+    User user ;
 }

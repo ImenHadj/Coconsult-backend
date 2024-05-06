@@ -11,7 +11,7 @@ import java.util.List;
 public interface IServiceEmployee {
     public ResponseEntity<?> calculateAvailablePercentage();
     public ResponseEntity<Double> calculateNbreEmpl();
-    public void addEmployeeEtAffectDepartement(Employee employee,Long id);
+    public void addEmployeeEtAffectDepartement(Employee employee,Long id,Long idT);
     public ResponseEntity<Long> updateEmployee(Long id, Employee updatedEmployee,Long p,Long teamId);
     public void deleteEmployee(Long id);
     public Employee getEmployee(Long id);
@@ -21,5 +21,5 @@ public interface IServiceEmployee {
     public List<Employee> findAllByPosteEmployee(PosteEmployee posteEmployee);
     public Employee assignEmToDep(Long idE,Long idDep);
     public List<Employee> findByPosteEmployeeStartingWith(String StartingLetter);
-    void assignTeamToEmployee(Long employeeId, Long teamId);
+   // void assignTeamToEmployee(Long employeeId, Long teamId);
 }

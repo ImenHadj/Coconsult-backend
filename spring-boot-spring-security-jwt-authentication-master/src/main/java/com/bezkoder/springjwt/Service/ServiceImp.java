@@ -25,6 +25,7 @@ public class ServiceImp implements Iservice {
     TaskRepository taskRepository;
     TeamRepository teamRepository;
     EmployeeRepository employeeRepository;
+    UserRepository    userRepository;
 
     public Project addProject(Project p) {
         return projectRepository.save(p);
@@ -399,7 +400,7 @@ public class ServiceImp implements Iservice {
         teamRepository.save(team);
     }
 
-    public Team addTeamAndAssignToProject(Team team, Long projectId) {
+   /* public Team addTeamAndAssignToProject(Team team, Long projectId) {
         // Récupérer le projet correspondant à l'ID fourni
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new NoSuchElementException("Aucun projet trouvé avec l'ID : " + projectId));
@@ -422,7 +423,7 @@ public class ServiceImp implements Iservice {
 
         return savedTeam;
     }
-
+*/
     public List<Team> getAllTeams() {
         return teamRepository.findAll();
     }
@@ -623,7 +624,39 @@ public class ServiceImp implements Iservice {
         // Retourner la tâche ajoutée
         return cons;
     }
+    public List<User>getproductowners(){
+        return  userRepository.getByRole();
+    }
+    /***/
+    public Team addTeamAndAssignToProject(Team team, Long projectId,Long id) {
+        // Récupérer le projet correspondant à l'ID fourni
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new NoSuchElementException("Aucun projet trouvé avec l'ID : " + projectId));
+        User u = userRepository.findById(id).orElse(null);
+        project.setUser(u);
+        // Vérifier s'il existe déjà une équipe associée à ce projet
+        Team existingTeam = project.getTeam();
+        if (existingTeam != null) {
+            throw new IllegalStateException("Ce projet a déjà une équipe associée.");
+        }
 
+        // Associer l'équipe au projet
+        team.setProject(project);
+
+        // Enregistrer l'équipe
+        Team savedTeam = teamRepository.save(team);
+
+        // Mettre à jour la référence de l'équipe dans le projet
+        project.setTeam(savedTeam);
+        projectRepository.save(project);
+
+        return savedTeam;
+    }
+
+    public List<Employee> getEmployeesByTeam(Long teamId) {
+
+        return employeeRepository.getEmployeesByTeamId(teamId);
+    }
 }
 
 
