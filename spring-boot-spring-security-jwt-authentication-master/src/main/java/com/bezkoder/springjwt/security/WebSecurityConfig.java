@@ -97,7 +97,8 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
               .requestMatchers("/api/test/**").permitAll()
                   .requestMatchers("/api/users/**").permitAll()
                   .requestMatchers("/api/test/user" ).permitAll()
-
+                  .requestMatchers("/chats/**").permitAll()
+                  .requestMatchers("/chats/message/{chatId}").permitAll()
                   .requestMatchers("/api/users/**").permitAll()
                   .requestMatchers("/api/users/statistics/role").permitAll()
 

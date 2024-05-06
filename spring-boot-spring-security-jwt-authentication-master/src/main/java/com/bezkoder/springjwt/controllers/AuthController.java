@@ -673,7 +673,26 @@ public class AuthController {
   }
 
 
+  @PutMapping("/activate/{userId}")
+  public ResponseEntity<?> activateAccount(@PathVariable Long userId) {
+    // Vérifier si l'utilisateur existe dans la base de données
+    Optional<User> userOptional = userRepository.findById(userId);
+    if (userOptional.isEmpty()) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("User not found"));
+    }
 
+    User user = userOptional.get();
+    if (user.getStatus() == AccountStatus.BANNED) {
+      // Activer le compte en mettant à jour le statut
+      user.setStatus(AccountStatus.ACTIVE);
+      userRepository.save(user);
+      return ResponseEntity.ok(new MessageResponse("Account activated successfully"));
+    } else {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("Account is not banned"));
+    }
+
+
+  }
 
 }
 

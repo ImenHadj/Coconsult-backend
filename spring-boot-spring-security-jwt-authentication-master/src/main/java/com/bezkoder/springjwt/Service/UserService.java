@@ -1,5 +1,6 @@
 package com.bezkoder.springjwt.Service;
 
+import com.bezkoder.springjwt.exceptions.UserNotFoundException;
 import com.bezkoder.springjwt.models.User;
 import com.bezkoder.springjwt.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 
@@ -53,6 +55,17 @@ public class UserService {
 
     private String generateSurveyId() {
         return "SURVEY-" + System.currentTimeMillis();
+    }
+
+
+    public User getUserByUserName(String username) throws UserNotFoundException {
+        Optional<User> user1=userRepository.findByUsername(username);
+
+        if (user1.isPresent()){
+            return user1.get();
+        }else {
+            throw new UserNotFoundException();
+        }
     }
 }
 
