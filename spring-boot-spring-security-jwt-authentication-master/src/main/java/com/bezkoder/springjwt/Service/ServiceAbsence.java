@@ -19,6 +19,7 @@ public class ServiceAbsence implements IServiceAbsence {
 
     AbsenceRepo absenceRepo;
     EmployeeRepo employeeRepo;
+    UserRepository userRepository;
 
     @Override
     public ResponseEntity<Long> addAbsence(Absence absence, Long id) {
@@ -31,8 +32,18 @@ public class ServiceAbsence implements IServiceAbsence {
 
     public List<Absence> searchAbsenceByStartingLetters(String StartingLetter) {
 //        return congeRepo.findByCommentaireStartingWithOrJustificationStartingWith(StartingLetter, StartingLetter);
+
         return absenceRepo.findByMotifStartingWith(StartingLetter);
 
+    }
+    public ResponseEntity<?> a3tiniEsm(Absence absence){
+        Long id = absence.getEmp().getUserId();
+        User user = userRepository.findById(id).orElse(null);
+        if (user != null) {
+            return ResponseEntity.ok(user.getUsername());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @Override
@@ -41,7 +52,6 @@ public class ServiceAbsence implements IServiceAbsence {
         Absence existingAbsence = absenceRepo.findById(id).get();
 
         existingAbsence.setMotif(updatedAbsence.getMotif());
-//        existingAbsence.setJustification(updatedAbsence.getJustification());
         existingAbsence.setDate(updatedAbsence.getDate());
         existingAbsence.setValidee(updatedAbsence.isValidee());
 
@@ -58,6 +68,20 @@ public class ServiceAbsence implements IServiceAbsence {
         Employee emp = employeeRepo.findById(id).get();
         return emp.getAbsences();
     }
+
+    @Override
+    public Set<Absence> getAbsencesByUserId(Long id) {
+        User user = userRepository.findById(id).get();
+        List<Employee> employees = employeeRepo.findAll();
+        Employee employee = new Employee();
+        for (Employee u : employees){
+            if(u.getUserId() ==id){
+                employee=u;
+            }
+        }
+        return employee.getAbsences();
+    }
+
     @Override
     public Absence getAbsence(Long id) {
         return absenceRepo.findById(id).get();
@@ -65,11 +89,12 @@ public class ServiceAbsence implements IServiceAbsence {
 
 
     public List<Absence> retrieveAbsencesForToday() {
-        LocalDate currentDate = LocalDate.now();  // Current local date
+        LocalDate currentDate = LocalDate.now();
         return absenceRepo.findByDate(currentDate);
     }
     public List<Absence> retrieveAll() {
         return absenceRepo.findAll();
     }
+
 
 }

@@ -1,6 +1,8 @@
 package com.bezkoder.springjwt.Service.interfaces;
 
 import com.bezkoder.springjwt.models.ContratEmployee;
+import com.google.zxing.WriterException;
+import com.lowagie.text.DocumentException;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.ResponseEntity;
 
@@ -16,6 +18,6 @@ public interface IServiceContratEmpl {
     List<ContratEmployee> retrieveAll();
     public Integer countByIsArchiveIsFalseAndDate_debutBetween(Date startDate, Date endDate);
 //    public void generateContractPDF(ContratEmployee contrat) throws IOException;
-    public void export(HttpServletResponse response, ContratEmployee contrat) throws IOException;
+    public void export(HttpServletResponse response, ContratEmployee contrat,Long id) throws IOException, WriterException, DocumentException;
 
 }

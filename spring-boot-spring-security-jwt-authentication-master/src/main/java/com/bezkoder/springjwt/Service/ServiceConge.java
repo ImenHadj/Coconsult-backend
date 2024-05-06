@@ -5,14 +5,14 @@ import com.bezkoder.springjwt.models.*;
 import com.bezkoder.springjwt.repository.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -24,10 +24,42 @@ public class ServiceConge implements IServiceConge {
     CongeRepo congeRepo;
     EmployeeRepo employeeRepo;
 
+    UserRepository userRepository;
+
+    private JavaMailSender emailSender;
+
+    public  ResponseEntity<?> SendEmailConge(Long id, Conge conge) {
+        Employee employee = employeeRepo.findById(id).get();
+        List<User> users = userRepository.findAll();
+        User user = new User();
+
+        for (User u : users){
+            if(employee.getUserId() ==u.getId()){
+                user=u;
+            }
+        }
+
+        SimpleMailMessage message  = new SimpleMailMessage();
+        message.setFrom("gramiaziz9@gmail.com");
+        message.setSubject("Your Leave request");
+        message.setTo(user.getEmail());
+        message.setText("Dear "+user.getUsername()+ "," +
+                "\n\nYour Leave request with ID " + conge.getId_conge() +
+                " is "+conge.getStatutC()+"."+"\n\nPlease take necessary actions.\n\nSincerely,\nYour Company");
+        emailSender.send(message);
+        return ResponseEntity.ok( conge.getId_conge());
+    }
+
     @Override
     public Set<Conge> getCongesByEmp(Long id) {
-        Employee emp = employeeRepo.findById(id).get();
-        return emp.getConges();
+        List<Employee> employees = employeeRepo.findAll();
+        Employee employee = new Employee();
+        for (Employee u : employees){
+            if(u.getUserId() ==id){
+                employee=u;
+            }
+        }
+        return employee.getConges();
     }
 
     public boolean isCongeRequestValid(Conge conge, Long employeeId) {
@@ -40,8 +72,6 @@ public class ServiceConge implements IServiceConge {
                 || conge.getDate_debut().after(conge.getDate_fin())) {
             return false;
         }
-
-
         List<Conge> overlappingConges = congeRepo.findCongeInSamePeriodAndSameTeam(
                 employee.getTeams().getTeam_id(),
                 employee.getPosteEmployee(),
@@ -52,8 +82,9 @@ public class ServiceConge implements IServiceConge {
     }
 
     public ResponseEntity<?> saveConge(Conge conge,Long id){
+        Employee employee = employeeRepo.findById(id).get();
         if (isCongeRequestValid(conge,id)) {
-            Employee employee = employeeRepo.findById(id).get();
+
             conge.setEmployee(employee);
             long differenceInMilliseconds = conge.getDate_fin().getTime() - conge.getDate_debut().getTime();
             long differenceInDays = TimeUnit.MILLISECONDS.toDays(differenceInMilliseconds);
@@ -63,10 +94,24 @@ public class ServiceConge implements IServiceConge {
             return ResponseEntity.ok( conge.getId_conge());
         }else{
             Map<String, String> errorResponse = new HashMap<>();
-            errorResponse.put("error", "Invalid conge request. Please check your inputs.");
+            long differenceInMilliseconds = conge.getDate_fin().getTime() - conge.getDate_debut().getTime();
+            long differenceInDays = TimeUnit.MILLISECONDS.toDays(differenceInMilliseconds);
+
+            if (employee.getNbrJourConge() < 0 ) {
+                errorResponse.put("error", "there is any days left.");            }
+            if ( employee.getNbrJourConge()<differenceInDays
+            ) {
+                errorResponse.put("error", "Too much days.");
+            }
+            if ( conge.getDate_debut().after(conge.getDate_fin())) {
+                errorResponse.put("error", "Invalid conge request. Please check your inputs.");
+            }else{
+                errorResponse.put("error", "Check with the administration.");
+            }
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         }
-    }
+        }
+
     public boolean isCongeRequestValidUpdate(Conge conge, Long employeeId, Long congeIdToUpdate) {
         Employee employee = employeeRepo.findById(employeeId).get();
 
@@ -99,7 +144,6 @@ public class ServiceConge implements IServiceConge {
         Employee employee = conge.getEmployee();
         if (isCongeRequestValidUpdate(updatedConge,employee.getId_employe(),id)) {
             conge.setCommentaire(updatedConge.getCommentaire());
-//            conge.setJustification(updatedConge.getJustification());
             conge.setDate_debut(updatedConge.getDate_debut());
             conge.setDate_fin(updatedConge.getDate_fin());
             conge.setStatutC(updatedConge.getStatutC());
@@ -112,7 +156,21 @@ public class ServiceConge implements IServiceConge {
             return ResponseEntity.ok( conge.getId_conge());
         }else{
             Map<String, String> errorResponse = new HashMap<>();
-            errorResponse.put("error", "Invalid conge request. Please check your inputs.");
+            long differenceInMilliseconds = updatedConge.getDate_fin().getTime() - updatedConge.getDate_debut().getTime();
+            long differenceInDays = TimeUnit.MILLISECONDS.toDays(differenceInMilliseconds);
+
+            if (employee.getNbrJourConge() < 0 ) {
+                errorResponse.put("error", "there is any days left.");            }
+            if ( employee.getNbrJourConge()<differenceInDays
+                   ) {
+                errorResponse.put("error", "Too much days.");
+            }
+            if ( updatedConge.getDate_debut().after(updatedConge.getDate_fin())) {
+                errorResponse.put("error", "Invalid conge request. Please check your inputs.");
+            }else{
+                errorResponse.put("error", "Check with the administration.");
+
+            }
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         }
     }
@@ -142,7 +200,6 @@ public class ServiceConge implements IServiceConge {
     }
 
     public List<Conge> searchCongesByStartingLetters(String StartingLetter) {
-//        return congeRepo.findByCommentaireStartingWithOrJustificationStartingWith(StartingLetter, StartingLetter);
         return congeRepo.findByCommentaireStartingWith(StartingLetter);
 
     }
@@ -163,4 +220,15 @@ public class ServiceConge implements IServiceConge {
         return nombreCongesParType;
     }
 
+    @Override
+    public Long getIdEmplByIdUSer(Long id) {
+        List<Employee> employees = employeeRepo.findAll();
+        Employee employee = new Employee();
+        for (Employee u : employees){
+            if(u.getUserId() ==id){
+                employee=u;
+            }
+        }
+        return employee.getId_employe();
+    }
 }

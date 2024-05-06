@@ -19,6 +19,10 @@ public class AbsenceController {
     public ResponseEntity<Long> addAbsence(@RequestBody Absence p, @PathVariable ("id") Long id){
         return iServiceAbsence.addAbsence(p,id);
     }
+    @GetMapping("/givename")
+    public ResponseEntity<?> givename(@RequestBody Absence p){
+        return iServiceAbsence.a3tiniEsm(p);
+    }
     @GetMapping("/search")
     public ResponseEntity<List<Absence>> searchCongesStartingWithLetter(
             @RequestParam String startingLetter) {
@@ -48,9 +52,16 @@ public class AbsenceController {
     public List<Absence> retrieveAll(){
         return iServiceAbsence.retrieveAll();
     }
+    @GetMapping("/getAbsencesByUserId/{id}")
+    public Set<Absence> getAbsencesByUserId(@PathVariable("id") Long id){
+        return iServiceAbsence.getAbsencesByUserId(id);
+    }
 
     @GetMapping("/getAbsence/{id}")
     public Absence getAbsence(@PathVariable("id") Long id){
         return iServiceAbsence.getAbsence(id);
     }
+
+
+
 }

@@ -39,10 +39,7 @@ public interface CongeRepo extends JpaRepository<Conge,Long> {
             @Param("end") LocalDate end,
             @Param("employeeId") Long employeeId);
 
-
-//    List<Conge> findByCommentaireStartingWithOrJustificationStartingWith(String commentaireStartingLetter, String justificationStartingLetter);
    List<Conge> findByCommentaireStartingWith(String commentaireStartingLetter);
-//List<Conge> findByCommentaireStartingWithOrTypeCStartingWith(String commentaireStartingLetter, String typeStartingLetter);
 
     List<Conge> findByStatutC(String statutC);
 }

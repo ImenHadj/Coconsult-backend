@@ -71,6 +71,10 @@ public interface IServiceClient {
 
     List<paymentpercentage> percentage();
 
+    List<Client> getallclientsbyproductowner();
+
+    List<Project> getprojbyclient(Long id);
+
     //send reminder
 
 }

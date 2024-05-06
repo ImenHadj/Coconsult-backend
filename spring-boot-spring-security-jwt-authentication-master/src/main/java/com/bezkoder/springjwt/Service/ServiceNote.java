@@ -5,6 +5,7 @@ import com.bezkoder.springjwt.models.*;
 import com.bezkoder.springjwt.repository.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,6 +19,7 @@ public class ServiceNote implements ISerivceNote {
     NoteRepo noteRepo;
     EmployeeRepo employeeRepo;
     PerfermanceEmplRepo perfermanceEmplRepo;
+    UserRepository userRepository;
 
     @Override
     public void addNote(Note note, Long id) {
@@ -90,5 +92,28 @@ public class ServiceNote implements ISerivceNote {
     @Override
     public List<Note> retrieveAll() {
         return noteRepo.findAll();
+    }
+
+    @Override
+    public Set<Note> getNotesByEmp(Long id) {
+        Employee emp = employeeRepo.findById(id).get();
+        return emp.getNotes();
+    }
+
+    public ResponseEntity<?> getUserNameByIdUSer(Long id) {
+        User user = userRepository.findById(id).get();
+        return ResponseEntity.ok(user);
+    }
+
+    public ResponseEntity<?> getUserNameByIdEmpl(Long id) {
+        Employee employee = employeeRepo.findById(id).get();
+        List<User> users = userRepository.findAll();
+        User user = new User();
+        for (User u :users){
+             if(u.getId() ==employee.getUserId()){
+                 user=u;
+             }
+        }
+        return ResponseEntity.ok(user);
     }
 }

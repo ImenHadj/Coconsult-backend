@@ -118,7 +118,6 @@ public class ServiceEmployee implements IServiceEmployee {
             if(em.getPosteEmployee().equals(posteEmployee)){
                 anis.add(em);
             }
-
         }
         return anis;
     }
@@ -156,7 +155,7 @@ public class ServiceEmployee implements IServiceEmployee {
     public ResponseEntity<?> calculateAvailablePercentage() {
         List<Employee> employees = employeeRepo.findAll();
         double anis=0;
-        double total = employees.size();
+    //    double total = employees.size();
         for(Employee employee : employees){
             if(employee.getPerformanceEmployee()!=null){
                 if(employee.getPerformanceEmployee().getMoyenne()>3){

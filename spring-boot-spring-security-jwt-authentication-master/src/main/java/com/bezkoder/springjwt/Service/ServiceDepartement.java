@@ -5,10 +5,13 @@ import com.bezkoder.springjwt.models.*;
 import com.bezkoder.springjwt.repository.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @Service
@@ -20,32 +23,32 @@ public class ServiceDepartement implements IServiceDepartement {
 
     public ResponseEntity<Double> calculateAvailablePercentage() {
         List<Departement> departments = departementRepo.findAll();
-        int total = 0; // Initialize total to 0
+        int total = 0;
         for (Departement department : departments) {
-            total += department.getMaxSaturation(); // Accumulate the total maximum saturation of all departments
+            total += department.getMaxSaturation();
         }
         int availablePlaces = departments.stream()
                 .mapToInt(department -> {
                     int maxSaturation = department.getMaxSaturation();
                     int nbreEmpl = department.getNbreEmpl();
                     int available = maxSaturation - nbreEmpl;
-                    System.out.println("Max Saturation: " + maxSaturation + ", Employees: " + nbreEmpl + ", Available: " + available);
+                  //  System.out.println("Max Saturation: " + maxSaturation + ", Employees: " + nbreEmpl + ", Available: " + available);
                     return available;
                 })
                 .sum();
-        System.out.println("Total Max Saturation: " + total);
-        System.out.println("Total Available Places: " + availablePlaces);
-        return ResponseEntity.ok((double) availablePlaces); // Calculate percentage
+    //    System.out.println("Total Max Saturation: " + total);
+   //     System.out.println("Total Available Places: " + availablePlaces);
+        return ResponseEntity.ok((double) availablePlaces);
     }
     public ResponseEntity<Double> calculateMax() {
 
         List<Departement> departments = departementRepo.findAll();
-        int total = 0; // Initialize total to 0
+        int total = 0;
         for (Departement department : departments) {
-            total += department.getMaxSaturation(); // Accumulate the total maximum saturation of all departments
+            total += department.getMaxSaturation();
         }
-        System.out.println("Total Max Saturation: " + total);
-        return ResponseEntity.ok((double) total); // Calculate percentage
+  //      System.out.println("Total Max Saturation: " + total);
+        return ResponseEntity.ok((double) total);
     }
 
     @Override
@@ -53,7 +56,6 @@ public class ServiceDepartement implements IServiceDepartement {
 
             departementRepo.save(departement);
             return departement.getId_departement();
-
     }
     @Override
     public Departement updateDepartment(Long id,Departement updatedDepartement) {
@@ -76,14 +78,16 @@ public class ServiceDepartement implements IServiceDepartement {
         departementRepo.deleteById(idDepartment);
     }
     @Override
-    public void affecterEmplADep(Set<Employee> ListEmpls,Long idDepartment) {
+    public ResponseEntity<?> affecterEmplADep(Set<Employee> ListEmpls, Long idDepartment) {
         Departement existingDepartement = departementRepo.findById(idDepartment).get();
-
         if(ListEmpls.size()>existingDepartement.getMaxSaturation()){
-            log.info("you pass the limit");
-        }else {
-            for (Employee employee : ListEmpls) {
 
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "you pass the limit.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+        }
+//        else {
+            for (Employee employee : ListEmpls) {
                 employee.setDepartement(existingDepartement);
                 employeeRepo.save(employee);
             }
@@ -91,9 +95,8 @@ public class ServiceDepartement implements IServiceDepartement {
             Set<Employee> anis = existingDepartement.getEmployees();
             existingDepartement.setNbreEmpl(anis.size());
             departementRepo.save(existingDepartement);
-        }
-
-
+        return ResponseEntity.ok("Department added with success.");
+//        }
     }
     @Override
     public Departement retrieveDepartment(Long idDepartment) {

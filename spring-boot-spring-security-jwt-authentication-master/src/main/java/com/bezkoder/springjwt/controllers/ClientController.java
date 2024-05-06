@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = "*")
+/*@CrossOrigin(origins = "*")*/
 @RestController
 @RequestMapping("/Clients")
 public class ClientController {
@@ -134,6 +134,14 @@ public Long addfacture(@RequestBody Facture f, @PathVariable Long clientId,@Path
     @GetMapping("/percentage")
         public List<paymentpercentage> percentage(){
           return  iServiceClient.percentage();
+    }
+    @GetMapping("/clientsbyprod")
+    public List<Client> clientsbyprod(){
+        return iServiceClient.getallclientsbyproductowner();
+    }
+    @GetMapping("/projclient/{id}")
+    public List<Project>  projbyidclient(@PathVariable Long id){
+        return iServiceClient.getprojbyclient(id);
     }
 
 }
