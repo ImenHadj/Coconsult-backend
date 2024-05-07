@@ -18,7 +18,7 @@ import java.util.Map;
 
 @RestController
 @AllArgsConstructor
-//@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/resource")
 public class ResourceController {
     IResourcesService resourcesService ;

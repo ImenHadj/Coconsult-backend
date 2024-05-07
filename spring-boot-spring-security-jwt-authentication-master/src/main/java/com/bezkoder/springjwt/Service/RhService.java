@@ -314,4 +314,17 @@ public class RhService  implements  IRhService {
     }
 
 
+
+    @Scheduled(fixedRate = 360000)
+    public void checkAcceptedCandidatsWithoutDateEntretien() {
+        LocalDate currentDate = LocalDate.now();
+        LocalDate dateLimite = currentDate.minusDays(7);
+        // Récupérer les candidats acceptés sans date d'entretien après plus d'une semaine
+        List<Candidat> candidats = candidatRepo.findAcceptedCandidatsWithoutDateEntretien(dateLimite);
+        for (Candidat candidat : candidats) {
+            System.out.println("Candidat " + candidat.getNom() + " a été accepté mais n'a pas de date d'entretien après plus de 7 jours.");
+
+        }
+    }
+
 }

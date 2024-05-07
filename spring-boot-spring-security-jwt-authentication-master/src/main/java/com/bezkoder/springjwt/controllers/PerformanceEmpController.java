@@ -15,6 +15,7 @@ import java.util.Map;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/perfomanceEmpl")
+@CrossOrigin(origins = "http://localhost:4200")
 public class PerformanceEmpController {
     @Autowired
     private ServicePerformance performanceService;

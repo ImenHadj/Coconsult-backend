@@ -1,5 +1,6 @@
 package com.bezkoder.springjwt.controllers;
 
+import com.bezkoder.springjwt.DTO.TeamDTO;
 import com.bezkoder.springjwt.Service.Iservice;
 import com.bezkoder.springjwt.models.*;
 
@@ -207,11 +208,11 @@ public class Controller {
         iservice.assignEmployeesToTeam(employees,teamId);
     }
 
-    @PostMapping("/addteamaff/{projectId}/{iduser}")
-    public Team addTeamAndAssignToProject(@PathVariable Long projectId, @RequestBody Team team,@PathVariable Long iduser) {
-        Team addedTeam = iservice.addTeamAndAssignToProject(team,projectId,iduser);
+   /* @PostMapping("/addteamaff/{projectId}")
+    public Team addTeamAndAssignToProject(@PathVariable Long projectId, @RequestBody Team team) {
+        Team addedTeam = iservice.addTeamAndAssignToProject(team,projectId);
         return addedTeam;
-    }
+    }*/
 
 
     @GetMapping("/progression/{projectId}")
@@ -226,9 +227,10 @@ public class Controller {
 
     @GetMapping("/getAllTeams")
     @ResponseBody
-    public List<Team> getAllTeams() {
+    public List<TeamDTO> getAllTeams() {
         List<Team> teamList = iservice.getAllTeams();
-        return teamList;
+        List<TeamDTO> list=teamList.stream().map((team -> TeamDTO.toDto(team))).toList();
+        return list;
     }
 
     @PutMapping("/updateteam/{team_id}")
@@ -257,5 +259,24 @@ public class Controller {
     public List<User> getallPO(){
         return iservice.getproductowners();
     }
+    @PostMapping("/addteamaff/{projectId}/{iduser}")
+    public Team addTeamAndAssignToProject(@PathVariable Long projectId, @RequestBody Team team,@PathVariable Long iduser) {
+        Team addedTeam = iservice.addTeamAndAssignToProject(team,projectId,iduser);
+        return addedTeam;
+    }
+    @GetMapping("/getempl/{TeamId}")
+    public List<Employee> getEmployeeByTeam(@PathVariable Long TeamId){
+        return iservice.getEmployeesByTeam(TeamId);
+    }
 
+
+    @GetMapping("/sorted")
+    public List<Task> getSortedTasks() {
+        return iservice.getAllTasksSortedByDueDate();
+    }
+
+    @PostMapping("/addandasseignclient/{idc}")
+    public Project addandasseignclient(@PathVariable Long idc,@RequestBody Project p){
+        return iservice.addProjectandasseignClient(idc,p);
+    }
 }

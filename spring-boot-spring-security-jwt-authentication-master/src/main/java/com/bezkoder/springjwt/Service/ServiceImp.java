@@ -1,3 +1,4 @@
+
 package com.bezkoder.springjwt.Service;
 
 import com.bezkoder.springjwt.models.*;
@@ -24,11 +25,20 @@ public class ServiceImp implements Iservice {
     ProjectRepository projectRepository;
     TaskRepository taskRepository;
     TeamRepository teamRepository;
-    EmployeeRepository employeeRepository;
-    UserRepository userRepository;
+    EmployeeRepo employeeRepository;
+    UserRepository    userRepository;
+    ClientRep clientRep;
 
     public Project addProject(Project p) {
         return projectRepository.save(p);
+    }
+    public Project addProjectandasseignClient(Long idc,Project p){
+        Client c = clientRep.findById(idc).orElse(null);
+        p.setClient(c);
+        projectRepository.save(p);
+
+        return p;
+
     }
     public Project updateProject(Long projectId, Project updatedProject) {
         Project existingProject = projectRepository.findById(projectId)
@@ -399,36 +409,31 @@ public class ServiceImp implements Iservice {
         team.setNbteam(employees.size());
         teamRepository.save(team);
     }
-    /*getproductowner*/
-    public List<User>getproductowners(){
-        return  userRepository.getByRole();
-    }
-    /***/
-    public Team addTeamAndAssignToProject(Team team, Long projectId,Long id) {
-        // Récupérer le projet correspondant à l'ID fourni
-        Project project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new NoSuchElementException("Aucun projet trouvé avec l'ID : " + projectId));
-        User u = userRepository.findById(id).orElse(null);
-        project.setUser(u);
-        // Vérifier s'il existe déjà une équipe associée à ce projet
-        Team existingTeam = project.getTeam();
-        if (existingTeam != null) {
-            throw new IllegalStateException("Ce projet a déjà une équipe associée.");
-        }
 
-        // Associer l'équipe au projet
-        team.setProject(project);
+    /* public Team addTeamAndAssignToProject(Team team, Long projectId) {
+         // Récupérer le projet correspondant à l'ID fourni
+         Project project = projectRepository.findById(projectId)
+                 .orElseThrow(() -> new NoSuchElementException("Aucun projet trouvé avec l'ID : " + projectId));
 
-        // Enregistrer l'équipe
-        Team savedTeam = teamRepository.save(team);
+         // Vérifier s'il existe déjà une équipe associée à ce projet
+         Team existingTeam = project.getTeam();
+         if (existingTeam != null) {
+             throw new IllegalStateException("Ce projet a déjà une équipe associée.");
+         }
 
-        // Mettre à jour la référence de l'équipe dans le projet
-        project.setTeam(savedTeam);
-        projectRepository.save(project);
+         // Associer l'équipe au projet
+         team.setProject(project);
 
-        return savedTeam;
-    }
+         // Enregistrer l'équipe
+         Team savedTeam = teamRepository.save(team);
 
+         // Mettre à jour la référence de l'équipe dans le projet
+         project.setTeam(savedTeam);
+         projectRepository.save(project);
+
+         return savedTeam;
+     }
+ */
     public List<Team> getAllTeams() {
         return teamRepository.findAll();
     }
@@ -629,6 +634,51 @@ public class ServiceImp implements Iservice {
         // Retourner la tâche ajoutée
         return cons;
     }
+    public List<User>getproductowners(){
+        return  userRepository.getByRole();
+    }
+    /***/
+    public Team addTeamAndAssignToProject(Team team, Long projectId,Long id) {
+        // Récupérer le projet correspondant à l'ID fourni
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new NoSuchElementException("Aucun projet trouvé avec l'ID : " + projectId));
+        User u = userRepository.findById(id).orElse(null);
+        project.setUser(u);
+        // Vérifier s'il existe déjà une équipe associée à ce projet
+        Team existingTeam = project.getTeam();
+        if (existingTeam != null) {
+            throw new IllegalStateException("Ce projet a déjà une équipe associée.");
+        }
+
+        // Associer l'équipe au projet
+        team.setProject(project);
+
+        // Enregistrer l'équipe
+        Team savedTeam = teamRepository.save(team);
+
+        // Mettre à jour la référence de l'équipe dans le projet
+        project.setTeam(savedTeam);
+        projectRepository.save(project);
+
+        return savedTeam;
+    }
+
+    public List<Employee> getEmployeesByTeam(Long teamId) {
+
+        return employeeRepository.getEmployeesByTeamId(teamId);
+    }
+
+
+    public List<Task> getAllTasksSortedByDueDate() {
+        List<Task> tasks = taskRepository.findAll();
+
+        List<Task> sortedTasks = tasks.stream()
+                .sorted(Comparator.comparing(Task::getDueDate))
+                .collect(Collectors.toList());
+
+        return sortedTasks;
+    }
+
 
 }
 
@@ -702,28 +752,6 @@ public class ServiceImp implements Iservice {
         } else {
             throw new NoSuchElementException("Aucune tâche trouvée avec l'ID : " + taskId);
         }*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

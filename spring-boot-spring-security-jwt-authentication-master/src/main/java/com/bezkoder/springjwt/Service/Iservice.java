@@ -1,4 +1,5 @@
-package com.bezkoder.springjwt.Service;
+
+        package com.bezkoder.springjwt.Service;
 
 import com.bezkoder.springjwt.models.*;
 import org.springframework.http.ResponseEntity;
@@ -47,6 +48,12 @@ public interface Iservice {
     ResponseEntity<Team> getTeamById(Long id);
     // Consultant assignProjectsToConsultant(Long consultantId, List<Long> projectIds);
     Consultant addConsultantAndAssignToProject(Long projectId, Consultant consultant);
+    List<User>getproductowners();
+    List<Employee> getEmployeesByTeam(Long teamId);
+    List<Task> getAllTasksSortedByDueDate();
 
-    List<User> getproductowners();
+    Project addProjectandasseignClient(Long idc,Project p);
 }
+
+
+

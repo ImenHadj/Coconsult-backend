@@ -34,10 +34,11 @@ public class Project {
     private double expectedRevenue;
     @Enumerated(EnumType.STRING)
     private Priority priority;
-    @JsonIgnore
-    @OneToOne
+
+    @OneToOne(cascade = CascadeType.ALL)
     private Team team;
-    @JsonIgnore
+
+//    @JsonIgnore
     @OneToMany(mappedBy ="project",  cascade = CascadeType.ALL)
     private List<Task> tasks;
     @JsonIgnore
@@ -46,8 +47,6 @@ public class Project {
     @JsonIgnore
     @ManyToMany
     List<Resources> resources;
-
-
 
     @ManyToOne
     Client client;

@@ -3,6 +3,8 @@ package com.bezkoder.springjwt.repository;
 
 import com.bezkoder.springjwt.models.Employee;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -43,4 +45,10 @@ List<Employee> findByDepartementLibelleStartingWith(String posteEmployee);
             "INNER JOIN p.utilisateurs u " +
             "WHERE u.profession = :p ")
     List<Programme> listerProgrammesInteressants(@Param("p") Profession p);*/
+
+    @Query("SELECT e FROM Employee e JOIN e.teams t WHERE t.team_id = :teamId")
+    List<Employee> getEmployeesByTeamId(@Param("teamId") Long teamId);
+
+
+
 }

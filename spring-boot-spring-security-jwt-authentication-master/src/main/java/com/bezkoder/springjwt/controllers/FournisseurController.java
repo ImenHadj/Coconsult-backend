@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @RestController
 @AllArgsConstructor
-//@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/fournisseur")
 public class FournisseurController {
 

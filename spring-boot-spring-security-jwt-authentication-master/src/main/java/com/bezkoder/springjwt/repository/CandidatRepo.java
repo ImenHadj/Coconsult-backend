@@ -24,4 +24,8 @@ public interface CandidatRepo extends JpaRepository<Candidat, Long> {
     List<Candidat> findAllSelectionnesPlusDeDeuxJours(LocalDate dateLimite);
 
 
+    @Query("SELECT c FROM Candidat c JOIN c.detailRecrutement dr WHERE c.StatutCandidat = 'ACCEPTE' AND dr.dateEntretien IS NULL AND c.Datepostule <= :dateLimite")
+    List<Candidat> findAcceptedCandidatsWithoutDateEntretien(LocalDate dateLimite);
+
+
 }

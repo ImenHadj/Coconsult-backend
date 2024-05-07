@@ -13,7 +13,7 @@ import java.util.List;
 @Slf4j
 @AllArgsConstructor
 
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/DetailsRect")
 public class DetaisRecrutementControlleur {
     RhService rhService;

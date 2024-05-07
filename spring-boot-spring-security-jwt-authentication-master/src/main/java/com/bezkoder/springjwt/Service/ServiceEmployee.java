@@ -18,33 +18,43 @@ import java.util.*;
 public class ServiceEmployee implements IServiceEmployee {
     EmployeeRepo employeeRepo;
     DepartementRepo departementRepo;
-    TeamRepo teamRepo;
+    TeamRepository teamRepo;
     UserRepository userRepo;
     CongeRepo congeRepo;
     ContratEmplRepo contratEmplRepo;
     NoteRepo noteRepo;
     AbsenceRepo absenceRepo;
+    TeamRepository teamRepository;
     @Override
-    public void addEmployeeEtAffectDepartement(Employee employee,Long id) {
+    public void addEmployeeEtAffectDepartement(Employee employee,Long id,Long idT) {
         Departement departement = departementRepo.findById(id).get();
+        Team team = teamRepository.findById(idT).get();
 
-       int max = departement.getMaxSaturation();
-       int saturation = departement.getNbreEmpl();
-       if(max<=saturation ){
+        int max = departement.getMaxSaturation();
+        int saturation = departement.getNbreEmpl();
+        int maxCapacity = (int) team.getNbteam();
+        int currentCapacity = team.getEmployees().size();
+        if(max<=saturation || currentCapacity == maxCapacity){
 
-           log.info("vous atteint le max");
-       }else{
-           employee.setDepartement(departement);
-           departement.setNbreEmpl(saturation+1);
-           employeeRepo.save(employee);
-           departementRepo.save(departement);
-       }
+            log.info("vous atteint le max");
+        }else{
+            employee.setTeams(team);
+            team.getEmployees().add(employee);
+            employee.setDepartement(departement);
+            departement.setNbreEmpl(saturation+1);
+            employeeRepo.save(employee);
+            teamRepository.save(team);
+            departementRepo.save(departement);
+        }
     }
 
+
     @Override
-    public ResponseEntity<Long> updateEmployee(Long id, Employee updatedEmployee,Long p) {
+    public ResponseEntity<Long> updateEmployee(Long id, Employee updatedEmployee,Long p, Long teamId) {
         Employee emp = employeeRepo.findById(id).get();
         Departement depart = departementRepo.findById(p).get();
+        Team team = teamRepository.findById(teamId).get();
+
 
         if (emp == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(id);
@@ -61,9 +71,12 @@ public class ServiceEmployee implements IServiceEmployee {
             depart.setNbreEmpl(saturation + 1);
             emp.setPosteEmployee(updatedEmployee.getPosteEmployee());
             emp.setDate_embauche(updatedEmployee.getDate_embauche());
+            emp.getTeams().getEmployees().remove(emp);
+
+            emp.setTeams(team); // Affecter l'équipe à l'employé
             employeeRepo.save(emp);
             departementRepo.save(depart);
-
+            teamRepository.save(team);
             return ResponseEntity.ok(id);
         }
     }

@@ -11,7 +11,7 @@ import java.util.*;
 
 @RestController
 @AllArgsConstructor
-//@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/stock")
 public class StockController {
     IStockService stockService ;

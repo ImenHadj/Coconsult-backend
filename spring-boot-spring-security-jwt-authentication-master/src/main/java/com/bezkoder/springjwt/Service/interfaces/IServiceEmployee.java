@@ -11,8 +11,8 @@ import java.util.List;
 public interface IServiceEmployee {
     public ResponseEntity<?> calculateAvailablePercentage();
     public ResponseEntity<Double> calculateNbreEmpl();
-    public void addEmployeeEtAffectDepartement(Employee employee,Long id);
-    public ResponseEntity<Long> updateEmployee(Long id, Employee updatedEmployee,Long p);
+    public void addEmployeeEtAffectDepartement(Employee employee,Long id,Long idT);
+    public ResponseEntity<Long> updateEmployee(Long id, Employee updatedEmployee,Long p,Long teamId);
     public void deleteEmployee(Long id);
     public Employee getEmployee(Long id);
     public User getUser(Long id);

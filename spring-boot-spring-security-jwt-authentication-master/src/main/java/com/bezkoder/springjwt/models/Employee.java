@@ -52,7 +52,7 @@ public class Employee implements Serializable {
     Set<Absence> absences;
     private int nbrJourConge = 26;
 
-    @JsonIgnore
+   @JsonIgnore
     @ManyToOne (cascade = CascadeType.ALL)
     Team teams;
     @OneToOne(cascade = CascadeType.ALL)

@@ -33,19 +33,20 @@ public class EmployeeController {
         return  iServiceEmployee.calculateNbreEmpl();
 
     }
-    @PostMapping("/addEmployee/{id}")
-    public void addEmployeeEtAffectDepartement(@RequestBody Employee p,@PathVariable("id") Long id){
-        iServiceEmployee.addEmployeeEtAffectDepartement(p,id);
+    @PostMapping("/addEmployee/{id}/{idT}")
+    public void addEmployeeEtAffectDepartement(@RequestBody Employee p,@PathVariable("id") Long id,@PathVariable("idT") Long idT){
+        iServiceEmployee.addEmployeeEtAffectDepartement(p,id,idT);
     }
     @PostMapping("/assignEmToDep/{e}/{d}")
     public void assignEmToDep(@PathVariable("e") Long e,@PathVariable("d") Long d){
         iServiceEmployee.assignEmToDep(e,d);
     }
 
-    @PutMapping("/updateEmployee/{e}/{pp}")
-    public ResponseEntity<Long> updateEmployee(@PathVariable("e") Long e, @RequestBody Employee p,@PathVariable("pp") Long pp) {
-        return iServiceEmployee.updateEmployee(e,p,pp);
+    @PutMapping("/updateEmployee/{e}/{pp}/{T}")
+    public ResponseEntity<Long> updateEmployee(@PathVariable("e") Long e, @RequestBody Employee p,@PathVariable("pp") Long pp,@PathVariable("T") Long T) {
+        return iServiceEmployee.updateEmployee(e,p,pp,T);
     }
+
 
     @DeleteMapping("/DeleteEmployee/{p}")
     public void delete(@PathVariable("p") Long p) {
