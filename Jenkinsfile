@@ -6,3 +6,4 @@ pipeline {
                 git branch: 'principal', url: 'https://github.com/ImenHadj/Coconsult-backend.git'        }
     }
 }
+}
